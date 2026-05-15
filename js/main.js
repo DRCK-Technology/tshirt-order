@@ -1,5 +1,5 @@
 // 1. මෙතනට ඔයාගේ අලුත්ම DEPLOYMENT URL එක දාන්න (Anyone access දීපු එක)
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwqo_Kls7-lH0orLttU_Hd1ROxAlCShl2Tvi0g_Rzt_N9DM9AUfAqf9GHXeG58WCOFCrA/exec'; 
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzpEwwBaz_3KkwkE_mew1UCH5lbhQo-tsPHJWiL1Gh9eZwiaC69x-oYAY2zWhXivTXWpQ/exec'; 
 
 // --- 1. Size Selection Logic ---
 function selectSize(size) {
