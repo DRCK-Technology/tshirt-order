@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwIXFNCHfzXw0ZNwtJmohNYZpEEE3XMlqqbm-CpVRwU3DWGyOn4shPhf4gHAw36kUG2rw/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwqo_Kls7-lH0orLttU_Hd1ROxAlCShl2Tvi0g_Rzt_N9DM9AUfAqf9GHXeG58WCOFCrA/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
 
 function selectSize(size) {
     // 1. සියලුම chips වලින් 'active' class එක අයින් කරනවා
