@@ -1,0 +1,648 @@
+/* Custom Font එක Link කිරීම */
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('fonts\BAUHS93.TTF') format('woff2'); /* ඔයාගේ font file path එක මෙතනට දෙන්න */
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* මුළු වෙබ් අඩවියටම Font එක Apply කිරීම */
+* {
+    font-family: 'MyCustomFont', sans-serif !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}
+
+body {
+    background-color: #000;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto; /* මේක තියෙන්නම ඕනේ */
+}
+
+/* Background Blobs */
+.liquid-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    filter: blur(90px);
+}
+
+.blob {
+    position: absolute;
+    width: 650px; height: 650px;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: move 18s infinite alternate ease-in-out;
+}
+
+.cyan { background: #00d2ff; top: 15%; left: 15%; }
+.purple { background: #9d50bb; bottom: 15%; right: 15%; animation-delay: -5s; }
+.blue { background: #2472ff; top: 35%; left: 35%; width: 500px; height: 500px; animation-delay: -9s; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(60px, 100px) scale(1.1); }
+    100% { transform: translate(-40px, 30px) scale(1); }
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    z-index: 10;
+}
+
+/* Step Transitions */
+.step {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Layout එක මැදට ගන්න මේ style එක වැදගත් */
+/* පියවරවල් පෙන්වන ආකාරය */
+.step.active {
+    display: flex !important;
+    flex-direction: column; /* එක යට එක ලස්සනට තියෙන්න */
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh; /* Screen එකේ ඉඩ ගන්න */
+    width: 100%;
+    overflow-y: auto; /* scroll වෙන්න ඕනේ නම් විතරක් scroll වේවි */
+    padding: 20px 0;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Pill */
+.pill {
+    background: rgba(255, 255, 255, 0.05); /* තවත් විනිවිද පෙනෙන ලෙස */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 35px;
+    border-radius: 100px;
+    display: inline-flex; /* content එකේ ප්‍රමාණයට හැඩ ගැසීමට */
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+}
+
+/* Pill එක උඩට mouse එක ගෙනිච්චම වෙන වෙනස */
+/* .pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+} */
+
+.pill span {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: MyCustomFont;
+    text-transform: uppercase; /* කැපිටල් අකුරින් වඩාත් පිරිසිදු පෙනුමක් එයි */
+    letter-spacing: 1.5px; /* අකුරු අතර පරතරය */
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* ලෝගෝ දෙකේ පෙනුම */
+.pill-logo {
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+    transition: transform 0.3s ease;
+}
+/* 
+.pill:hover .pill-logo {
+    transform: scale(1.1) rotate(5deg);
+} */
+/* T-shirt Preview (No Animation) */
+.tshirt-mockup img {
+    width: 500px; 
+    max-width: 90vw;
+    margin: 15px 0;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.8));
+}
+
+/* --- Banner Section --- */
+.announcement {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    animation: fadeInDown 1s ease-out;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #00d2ff; /* ලස්සන Cyan පාටක් */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin-top: 15px;
+    line-height: 1.2;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.main-title span {
+    font-size: 1.8rem;
+    font-weight: 300;
+    background: linear-gradient(to right, #fff, #888);
+    -webkit-background-clip: text;  /* Chrome, Safari සඳහා */
+    background-clip: text;          /* Standard (Firefox සහ අලුත් Browser සඳහා) */
+    -webkit-text-fill-color: transparent;
+    display: block;
+}
+
+/* Mobile Responsive Adjustments */
+@media screen and (max-width: 600px) {
+    .main-title {
+        font-size: 1.8rem;
+    }
+    .main-title span {
+        font-size: 1.3rem;
+    }
+}
+
+/* පණිවිඩය උඩ සිට පහළට එන animation එක */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Glass Card */
+.liquid-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(50px) saturate(220%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 40px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.liquid-btn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 18px 70px;
+    border-radius: 100px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.liquid-btn:hover { transform: scale(1.05); }
+
+/* Placeholder අකුරු පැහැදිලිව පෙනෙන්න */
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* සුදු පැහැය 70% opacity එකකින් */
+    font-weight: 500;
+}
+
+/* User type කරන අකුරු පැහැදිලිව පෙනෙන්න */
+input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1); /* පසුබිම ටිකක් තද කළා */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    padding: 18px;
+    color: #ffffff; /* Type කරන අකුරු සම්පූර්ණ සුදු පාටින් */
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+/* Form Styles */
+input, select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    padding: 18px;
+    color: white;
+    margin-bottom: 15px;
+    outline: none;
+}
+
+/* Select Box එකේ පෙනුම */
+select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    outline: none;
+    appearance: none; /* Browser එකේ default ඊතලය අයින් කරයි */
+    -webkit-appearance: none;
+}
+/* chip box */
+.size-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.size-chip {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.size-chip:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Select කළ පසු පෙනුම */
+.size-chip.active {
+    background: white;
+    color: #1a1a2e;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    border-color: white;
+}
+/* chip box end */
+/* Dropdown එක ඇතුළේ තියෙන Options ලස්සන කිරීම */
+select option {
+    background: #1a1a2e; /* Card එකේ background එකට ගැලපෙන තද පාටක් */
+    color: white;
+    padding: 10px;
+}
+
+/* Hover කරන කොට පේන පාට */
+select option:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Back Button Styles --- */
+.back-nav {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(-5px); /* වමට පොඩ්ඩක් move වෙන animation එකක් */
+}
+
+.back-btn svg {
+    stroke: white;
+}
+
+.warning-text { color: #ffcc00; margin-bottom: 20px; }
+.chart-img { width: 100%; border-radius: 20px; margin-bottom: 15px; }
+h2 { margin-bottom: 30px; font-size: 24px; }
+
+/* --- Custom Alert Styles --- */
+.alert-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px); /* පිටුපස blur කරන කොටස */
+    display: none; /* පෙන්වන්න අවශ්‍ය වෙලාවට විතරක් active කරනවා */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.alert-box {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 40px;
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+    animation: popUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.alert-icon { font-size: 40px; margin-bottom: 15px; }
+
+#alertMessage {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.liquid-btn.small {
+    padding: 12px 40px;
+    font-size: 15px;
+    margin-top: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popUp {
+    from { transform: scale(0.8) translateY(20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* --- Mobile Responsiveness (Mainly for Phones) --- */
+@media screen and (max-width: 600px) {
+    
+    /* Pill එක mobile එකට ගැලපෙන ලෙස කුඩා කිරීම */
+    .pill {
+        margin-left: 20px;
+        padding: 8px 15px;
+        gap: 10px;
+        width: 90%; /* Screen එකේ දෙපැත්තට හිර නොවී පේන්න */
+        justify-content: center;
+    }
+
+    .pill span {
+        font-size: 13px; /* අකුරු පොඩ්ඩක් කුඩා කළා */
+        letter-spacing: 1px;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .pill-logo {
+        width: 22px;
+        height: 22px;
+    }
+
+    /* T-shirt එක screen එකට ගැලපෙන්න size කිරීම */
+    .tshirt-mockup img {
+        width: 100%;
+        max-width: 320px;
+        margin: 20px 0;
+    }
+
+    /* Card එකේ padding පොඩ්ඩක් අඩු කිරීම */
+    .liquid-card {
+        padding: 30px 20px;
+        width: 95%;
+        border-radius: 30px;
+    }
+
+    h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* Buttons සහ Inputs mobile එකට පහසු ලෙස සකස් කිරීම */
+    .liquid-btn {
+        width: 100%; /* Mobile වලදී button එක සම්පූර්ණ පළලට ගැනීම පහසුයි */
+        padding: 15px 0;
+        font-size: 16px;
+    }
+
+    input, select {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    /* Back button එකේ පිහිටීම */
+    .back-nav {
+        max-width: 95%;
+        margin-bottom: 10px;
+    }
+}
+
+/* --- Delayed Order Now Button Animation (ID එක පාවිච්චි කර ඇත) --- */
+
+#orderNowBtn {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpFade 0.8s ease-out forwards;
+    animation: slideUpFade 0.8s ease-out forwards, pulseGlow 1.5s infinite 1.5s;
+    animation-delay: 1.3s; /* තත්පර 1.5කට පස්සේ පටන් ගනී */
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+@keyframes slideUpFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* මේ button එකට විතරක් hover effects වෙනම ඕනෙ නම් මෙහෙම ගන්නත් පුළුවන් */
+#orderNowBtn:hover {
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+/* Preview Modal එක */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px); /* පිටුපස ලස්සනට blur කරයි */
+    cursor: zoom-out;
+}
+
+/* රූපය මතු වන විදිහ */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Close Button (X) */
+.close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+/* Payment Option එකේ සම්පූර්ණ Box එක */
+.pay-option {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex; /* මේකෙන් තමයි තිතයි අකුරුයි එක පේළියට ගන්නේ */
+    align-items: center;
+    gap: 15px; /* තිත සහ අකුරු අතර පරතරය */
+}
+
+/* Radio button එක (සුදු තිත) පොඩ්ඩක් ලස්සන කරන්න */
+.pay-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #00d2ff; /* Select වුණාම ලස්සන නිල් පාටක් එනවා */
+}
+
+/* Option එක උඩට mouse එක ගෙනියද්දී */
+.pay-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Select වුණාම highlight වෙන විදිහ */
+.pay-option.active-pay {
+    background: rgba(0, 210, 255, 0.1);
+    border-color: #00d2ff;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+}
+
+/* බැංකු විස්තර පෙන්වන Card එක */
+.bank-info-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 4px solid #00d2ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.custom-file-upload:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #00d2ff;
+}
+
+/* සියලුම පියවරවල් සාමාන්‍යයෙන් හංගලා තියෙන්න ඕනේ 
+.step {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+/* active කියන class එක තියෙන පියවර විතරක් පේන්න ඕනේ 
+.step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}*/
+
+/* Radio options වල සාමාන්‍ය පෙනුම */
+
+
+/* Mouse එක ගෙනියද්දී */
+
+/* තෝරපු option එක highlight කරන විදිහ */
+
+
+/* File Upload එක ලස්සන කරන්න */

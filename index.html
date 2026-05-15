@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Batch - Order T-Shirt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="liquid-bg">
+        <div class="blob cyan"></div>
+        <div class="blob purple"></div>
+        <div class="blob blue"></div>
+    </div>
+
+    <div class="container">
+        <!-- Step 1: Design Preview -->
+        <section class="step active" id="step1">
+            <div class="glass-nav">
+                <div class="pill">
+                    <img src="img/Crest - White.png" class="pill-logo" alt="Logo">
+                    <span>Technology Section - Dharmaraja College</span>
+                    <img src="img/Layer 6.png" class="pill-logo" alt="Logo">
+                </div>
+            </div>
+            <!-- Banner -->
+            <div class="announcement">
+                <span class="badge">LIMITED EDITION</span>
+                <h1 class="main-title">OFFICIAL '27 BATCH <br><span>T-SHIRT IS OUT NOW</span></h1>
+            </div>
+            <div class="design-display">
+                <!-- T-shirt design -->
+                <div class="tshirt-mockup">
+                    <img src="img/Batch t shirt tech_11.png" onclick="openPreview(this.src)" style="cursor: pointer;" alt="T-shirt Front">
+                </div>
+            </div>
+            <button id="orderNowBtn" class="liquid-btn" onclick="nextStep(2)">Order Now</button>
+        </section>
+
+        <!-- Step 2: Personal Details -->
+        <section class="step" id="step2">
+            <div class="back-nav">
+            <button class="back-btn" onclick="prevStep()">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            </button>
+        </div>
+            <div class="liquid-card">
+                <h2>Your Details</h2>
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Full Name" required>
+                    <input type="text" id="admissionNo" placeholder="Admission Number" required>
+                    <input type="text" id="class" placeholder="Class" required>
+                    <input type="tel" id="phone" placeholder="Phone Number" required>
+                </div>
+                <button class="liquid-btn" onclick="validateAndNext(2)">Next</button>
+            </div>
+        </section>
+
+        <!-- Step 3: Size Chart -->
+        <section class="step" id="step3">
+            <div class="back-nav">
+            <button class="back-btn" onclick="prevStep()">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            </button>
+        </div>
+            <div class="liquid-card">
+                <p class="warning-text">⚠️ Please remember your size.</p>
+                <div class="size-chart-container">
+                    <!--Size chart image -->
+                    <img src="size-chart.png" alt="Size Chart" class="chart-img">
+                </div>
+                <button class="liquid-btn" onclick="nextStep(4)">I Remember, OK</button>
+            </div>
+        </section>
+
+        <!-- Step 4: Final Selection -->
+        
+        <section class="step" id="step4">
+             <div class="back-nav">
+                <button class="back-btn" onclick="prevStep()">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="liquid-card">
+                <h2>Select Your Size</h2>
+                <div class="size-selector">
+                    <div class="size-chip" onclick="selectSize('S')">S</div>
+                    <div class="size-chip" onclick="selectSize('M')">M</div>
+                    <div class="size-chip" onclick="selectSize('L')">L</div> <!-- උදාහරණයක් ලෙස L select කර ඇත -->
+                    <div class="size-chip" onclick="selectSize('XL')">XL</div>
+                    <div class="size-chip" onclick="selectSize('XXL')">XXL</div>
+                </div>
+                <!-- සඟවන ලද input එකක් දත්ත ලබා ගැනීමට -->
+                <input type="hidden" id="finalSize" value="">
+    
+                <!-- Step 4 ඇතුළත -->
+                <button class="liquid-btn" onclick="validateAndNext(4)">Next</button>
+            </div>
+        </section>
+        <!-- Step 5: Payment Selection -->
+        <section class="step" id="step5" style="display: none;">
+            <div class="back-nav">
+                <button class="back-btn" onclick="prevStep()">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="liquid-card">
+                <h2>Payment Method</h2>
+                <p>Select how you would like to pay for your Tech Batch '27 T-shirt.</p>
+
+                <div class="payment-options">
+                    <label class="pay-option">
+                        <input type="radio" name="payMethod" value="cash" onclick="togglePaymentDetails('cash')">
+                        <span>Handover Cash (අතට මුදල් ලබාදීම)</span>
+                    </label>
+                    <label class="pay-option">
+                        <input type="radio" name="payMethod" value="bank" onclick="togglePaymentDetails('bank')">
+                        <span>Online Transfer / Bank Deposit</span>
+                    </label>
+                </div>
+
+                <!-- Bank Details (මෙය පෙන්වන්නේ Bank තේරුවොත් විතරයි) -->
+                <div id="bankDetailsArea" style="display: none; margin-top: 20px;">
+                    <div class="bank-info">
+                        <p><strong>Bank:</strong> Bank of Ceylon (BOC)</p>
+                        <p><strong>Account Name:</strong> [ඔයාගේ නම]</p>
+                        <p><strong>Account Number:</strong> 1234567890</p>
+                        <p><strong>Branch:</strong> Kandy</p>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <div class="file-upload-wrapper" style="margin-top: 15px;">
+                            <label for="slipFile" class="custom-file-upload">
+                                <i class="fas fa-image" style="margin-right: 8px;"></i>
+                                <span id="file-name-text">Select Payment Slip</span>
+                            </label>
+                            <input type="file" id="slipFile" accept="image/*" class="liquid-input" onchange="updateFileName()" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cash Details (මෙය පෙන්වන්නේ Cash තේරුවොත් විතරයි) -->
+                <div id="cashDetailsArea" style="display: none; margin-top: 20px;">
+                    <p class="highlight-text">Please handover the cash to the Class Treasurer or [name].</p>
+                </div>
+
+                <div class="btn-group" style="margin-top: 25px;">
+                    <button class="liquid-btn" onclick="submitOrder()">Complete Order</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Alert Box එක මේ විදිහට update කරන්න -->
+    <div id="customAlert" class="alert-overlay">
+        <div class="alert-box">
+            <div id="alertIcon" class="alert-icon">⚠️</div> <!-- id="alertIcon" එකතු කළා -->
+            <p id="alertMessage">Message goes here</p>
+            <button class="liquid-btn small" onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+
+    <!-- Full Screen Preview Overlay -->
+    <div id="imageModal" class="modal" onclick="closePreview()">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="fullImage">
+    </div>
+
+    <script>
+
+</script>
+    <script src="js/main.js"></script>
+</body>
+</html>
