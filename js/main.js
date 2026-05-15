@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbx4Px2mc065Lc3msEO9JKVfen7vu6tA8g772G3Au4_XCd_LjoOcRe0ZqHLMkOVXkJGd7A/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwtS7bDEEXxO1QFyj9ipKMmnfq0IsAPoREtYj5mgjtZrjDC6cuxYbqHdlECzNtq6K0WLw/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
 
 function selectSize(size) {
     // 1. සියලුම chips වලින් 'active' class එක අයින් කරනවා
@@ -120,11 +120,11 @@ async function submitOrder() {
     // 4. දත්ත ටික Form එකක් විදිහට හදනවා
     const formData = new FormData();
     formData.append("Name", name);
-    formData.append("Admission Number", admissionNo);
+    formData.append("Admission", admissionNo); // මෙතන "Admission"
     formData.append("Class", className);
-    formData.append("Phone Number", phone);
-    formData.append("T-shirt Size", finalSize);
-    formData.append("Payment Method", selectedPayment.value);
+    formData.append("Phone", phone);           // මෙතන "Phone"
+    formData.append("Size", finalSize);        // මෙතන "Size"
+    formData.append("Method", selectedPayment.value);
 
     // 5. Slip එකක් තියෙනවා නම් ඒකත් එකතු කරනවා
     const fileInput = document.getElementById('slipFile');
