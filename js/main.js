@@ -96,8 +96,8 @@ function updateFileName() {
 
 // --- 5. ඇණවුම යැවීම (Final Submission) ---
 // --- 5. ඇණවුම යැවීම (Final Submission) ---
+// --- 5. ඇණවුම යැවීම (Final Submission - Fast Upload සමඟ) ---
 async function submitOrder() {
-    // 💡 100%ක් නිවැරදි ගූගල් ලින්ක් එක මෙතනට දාන්න මචං
     const currentScriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; 
 
     // 1. දත්ත ටික ගන්නවා
@@ -118,10 +118,10 @@ async function submitOrder() {
     const submitBtn = document.querySelector(".btn-group button");
     if(submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerText = "Sending Data...";
+        submitBtn.innerText = "Compressing & Sending...";
     }
 
-    // 4. දත්ත ටික Form එකක් විදිහට හදනවා (Apps Script එකේ parameters වලටම ගැලපෙන්න)
+    // 4. දත්ත ටික Form එකක් විදිහට හදනවා
     const formData = new FormData();
     formData.append("Name", name);
     formData.append("Admission", admissionNo); 
@@ -130,20 +130,46 @@ async function submitOrder() {
     formData.append("Size", finalSize);        
     formData.append("Method", selectedPayment.value);
 
-    // 5. Slip එකක් තියෙනවා නම් ඒකත් එකතු කරනවා
+    // 5. Slip එකක් තියෙනවා නම් ඒක බ්‍රවුසර් එකෙන්ම Compress කරලා එකතු කරනවා
     const fileInput = document.getElementById('slipFile');
     if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
         const reader = new FileReader();
-        reader.onload = async function(e) {
-            const base64Data = e.target.result.split(',')[1];
-            formData.append("slipFile", base64Data);
-            formData.append("mimeType", file.type);
-            await finalFetch(currentScriptURL, formData); // 💡 මෙතනට නිවැරදි URL එක දුන්නා
+        
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = async function() {
+                // Canvas එකක් ආධාරයෙන් පින්තූරය කුඩා කිරීම
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // උපරිම පළල 1024px වෙන පරිදි රිසයිස් කිරීම
+                const MAX_WIDTH = 1024;
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Quality එක 0.7 (70%) කට අඩු කරලා Base64 දත්ත ලබාගැනීම
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
+
+                formData.append("slipFile", compressedBase64);
+                formData.append("mimeType", "image/jpeg");
+                
+                submitBtn.innerText = "Uploading to Drive...";
+                await finalFetch(currentScriptURL, formData);
+            };
+            img.src = event.target.result;
         };
         reader.readAsDataURL(file);
     } else {
-        await finalFetch(currentScriptURL, formData); // 💡 මෙතනටත් නිවැරදි URL එක දුන්නා
+        await finalFetch(currentScriptURL, formData);
     }
 }
 
