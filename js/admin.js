@@ -105,13 +105,25 @@ async function deleteOrder(admissionNo, button) {
 }
 
 // --- 4. Modal Preview ---
+// --- 4. Modal Preview (Google Drive ලින්ක් එක Direct Link එකක් බවට හරවා පෙන්වීම) ---
 function openSlipModal(url) {
     const modal = document.getElementById("slipModal");
     const modalImg = document.getElementById("modalImage");
-    modal.style.display = "flex";
-    modalImg.src = url;
-}
+    
+    if (!modal || !modalImg) return;
 
+    modal.style.display = "flex";
+    modalImg.src = ""; // පරණ පින්තූරය අයින් කර හිස් කරයි
+
+    // 💡 Google Drive ලින්ක් එකෙන් File ID එක වෙන් කරගෙන Direct Link එකක් හදනවා
+    if (url.includes("drive.google.com")) {
+        const fileId = url.split("/d/")[1].split("/")[0];
+        const directLink = `https://lh3.googleusercontent.com/d/${fileId}`;
+        modalImg.src = directLink;
+    } else {
+        modalImg.src = url; // සාමාන්‍ය ලින්ක් එකක් නම් එහෙම්ම දමයි
+    }
+}
 function closeSlipModal() {
     document.getElementById("slipModal").style.display = "none";
 }
