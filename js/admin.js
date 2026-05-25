@@ -142,3 +142,29 @@ function checkLogin() {
         alert("Incorrect Password! Try again.");
     }
 }
+
+// 💡 මුළු පිටුවම රීලෝඩ් නොකර වගුව විතරක් අප්ඩේට් කරන Function එක
+function refreshTableOnly() {
+    const refreshBtn = document.getElementById("refreshBtn");
+    
+    // බටන් එක ඔබපු ගමන් ඒක "Loading..." වෙනවා
+    if (refreshBtn) {
+        refreshBtn.disabled = true;
+        refreshBtn.innerText = "⏳ Loading Data...";
+        refreshBtn.style.borderColor = "#ffcc00";
+        refreshBtn.style.color = "#ffcc00";
+    }
+
+    // ඔයාගේ පරණ ලස්සනට වැඩ කරපු fetchOrders එක මෙතනදී රන් වෙනවා
+    fetchOrders();
+
+    // ඩේටා ටික ඇවිත් ඉවර වුණාම බටන් එක ආයෙත් සාමාන්‍ය තත්ත්වයට පත් කරන්න (තත්පර 2කින්)
+    setTimeout(() => {
+        if (refreshBtn) {
+            refreshBtn.disabled = false;
+            refreshBtn.innerText = "🔄 Refresh Table";
+            refreshBtn.style.borderColor = "#00ff88";
+            refreshBtn.style.color = "#00ff88";
+        }
+    }, 2500);
+}
