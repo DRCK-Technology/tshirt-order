@@ -95,35 +95,39 @@ function updateFileName() {
 }
 
 // --- 5. ඇණවුම යැවීම (Final Submission) ---
+// --- 5. ඇණවුම යැවීම (Final Submission) ---
 async function submitOrder() {
-    const scriptURL = 'ඔයාගේ_අලුත්ම_DEPLOYMENT_URL_එක'; // අනිවාර්යයෙන්ම අලුත් එකක් ගන්න
+    // 💡 100%ක් නිවැරදි ගූගල් ලින්ක් එක මෙතනට දාන්න මචං
+    const currentScriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; 
 
     // 1. දත්ත ටික ගන්නවා
     const name = document.getElementById('name').value;
     const admissionNo = document.getElementById('admissionNo').value;
     const className = document.getElementById('class').value;
     const phone = document.getElementById('phone').value;
-    const finalSize = document.getElementById('finalSize').value; // Hidden Input එක
+    const finalSize = document.getElementById('finalSize').value; 
     const selectedPayment = document.querySelector('input[name="payMethod"]:checked');
 
-    // 2. Validation (දත්ත අඩුවක් තියෙනවා නම් නවත්තනවා)
+    // 2. Validation
     if (!name || !admissionNo || !finalSize || !selectedPayment) {
         showAlert("Please fill all details and select a size!", "error");
         return;
     }
 
-    // 3. Button එක Disable කරනවා (පිට පිට එබීම වැළැක්වීමට)
+    // 3. Button එක Disable කිරීම
     const submitBtn = document.querySelector(".btn-group button");
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Sending Data...";
+    if(submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sending Data...";
+    }
 
-    // 4. දත්ත ටික Form එකක් විදිහට හදනවා
+    // 4. දත්ත ටික Form එකක් විදිහට හදනවා (Apps Script එකේ parameters වලටම ගැලපෙන්න)
     const formData = new FormData();
     formData.append("Name", name);
-    formData.append("Admission", admissionNo); // මෙතන "Admission"
+    formData.append("Admission", admissionNo); 
     formData.append("Class", className);
-    formData.append("Phone", phone);           // මෙතන "Phone"
-    formData.append("Size", finalSize);        // මෙතන "Size"
+    formData.append("Phone", phone);           
+    formData.append("Size", finalSize);        
     formData.append("Method", selectedPayment.value);
 
     // 5. Slip එකක් තියෙනවා නම් ඒකත් එකතු කරනවා
@@ -135,11 +139,11 @@ async function submitOrder() {
             const base64Data = e.target.result.split(',')[1];
             formData.append("slipFile", base64Data);
             formData.append("mimeType", file.type);
-            await finalFetch(scriptURL, formData);
+            await finalFetch(currentScriptURL, formData); // 💡 මෙතනට නිවැරදි URL එක දුන්නා
         };
         reader.readAsDataURL(file);
     } else {
-        await finalFetch(scriptURL, formData);
+        await finalFetch(currentScriptURL, formData); // 💡 මෙතනටත් නිවැරදි URL එක දුන්නා
     }
 }
 
