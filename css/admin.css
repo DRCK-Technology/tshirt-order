@@ -176,7 +176,7 @@ tr:hover {
     }
 
     /* 2. ඇඩ්මින් පැනල් එකේ තියෙන මාතෘකා, විස්තර සහ close බටන්ස් හයිඩ් කරනවා */
-    h1, h2, p, .admin-desc, .close-btn, #slipModal {
+    h1, h2, p, .admin-desc, .close-btn, #slipModal, #refreshBtn {
         display: none !important;
     }
 
