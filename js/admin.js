@@ -1,6 +1,5 @@
 const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec';
 
-document.addEventListener("DOMContentLoaded", fetchOrders);
 
 // --- 1. Data Fetch කිරීම (CORS බ්ලොක් නොවී JSONP ක්‍රමයට) ---
 function fetchOrders() {
@@ -126,4 +125,20 @@ function openSlipModal(url) {
 }
 function closeSlipModal() {
     document.getElementById("slipModal").style.display = "none";
+}
+
+// 💡 පරණ කෝඩ් වලට බාධාවක් නොවන පරිදි අලුතින්ම එකතු කළ Login Function එක
+function checkLogin() {
+    const inputPass = document.getElementById("adminPassInput").value;
+    const correctPass = "RajansTech27"; // 💡 ඔයාට කැමති පාස්වර්ඩ් එකක් මෙතනට දෙන්න මචං
+
+    if (inputPass === correctPass) {
+        document.getElementById("loginBox").style.display = "none"; // Login box එක හයිඩ් කරනවා
+        document.getElementById("adminContent").style.display = "block"; // වගුව සහ අනෙක් හැමදේම පෙන්වනවා
+        
+        // 💡 පාස්වර්ඩ් එක හරි නම් විතරක් ඔයාගේ පරණ function එක මෙතනදී කෝල් වෙනවා
+        fetchOrders(); 
+    } else {
+        alert("Incorrect Password! Try again.");
+    }
 }
