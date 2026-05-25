@@ -8,6 +8,14 @@
 </head>
 <body>
 
+    <div id="loginBox" style="max-width: 400px; margin: 100px auto; padding: 30px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); text-align: center; font-family: sans-serif;">
+    <h2 style="color: #fff; margin-bottom: 20px;">Admin Login</h2>
+    <input type="password" id="adminPassInput" placeholder="Enter Password" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; background: rgba(255,255,255,0.2); color: #fff; text-align: center; font-size: 16px; box-sizing: border-box;">
+    <button onclick="checkLogin()" style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: #00ff88; color: #000; font-weight: bold; cursor: pointer; font-size: 16px;">Login</button>
+</div>
+
+<div id="adminContent" style="display: none;">
+
     <div class="admin-container">
         <h2>Tech Batch - T-Shirt Orders Admin</h2>
         <p>Manage student orders, view payment slips, and approve status live.</p>
@@ -41,6 +49,7 @@
         <img class="modal-content" id="modalImage">
     </div>
 
+</div>
     <script src="js/admin.js"></script>
 </body>
 </html>
