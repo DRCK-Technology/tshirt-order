@@ -1,226 +1,144 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec';
+
+
+// --- 1. Data Fetch කිරීම (CORS බ්ලොක් නොවී JSONP ක්‍රමයට) ---
+function fetchOrders() {
+    const tbody = document.getElementById("adminTableBody");
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px;">Loading orders...</td></tr>`;
+
+    // කලින් තිබ්බ fetch එක වෙනුවට ලේසිම JSONP ක්‍රමය පාවිච්චි කිරීම
+    const script = document.createElement('script');
+    script.src = `${scriptURL}?action=read&callback=handleResponse`;
+    document.body.appendChild(script);
+    document.body.removeChild(script); // කෝඩ් එක රන් වුණාම Script tag එක අයින් කරයි
 }
 
-body {
-    background: #0f172a;
-    color: #e2e8f0;
-    padding: 20px;
-}
+// Google Sheet එකෙන් ඩේටා ටික ආවම රන් වෙන Function එක
+function handleResponse(data) {
+    const tbody = document.getElementById("adminTableBody");
+    tbody.innerHTML = ""; 
 
-.admin-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-h2 {
-    color: #00ff88;
-    margin-bottom: 5px;
-}
-
-p {
-    color: #94a3b8;
-    margin-bottom: 25px;
-    font-size: 14px;
-}
-
-.table-responsive {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    text-align: left;
-}
-
-th, td {
-    padding: 12px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-th {
-    background-color: rgba(0, 255, 136, 0.1);
-    color: #00ff88;
-    font-weight: 600;
-}
-
-tr:hover {
-    background: rgba(255, 255, 255, 0.02);
-}
-
-/* Buttons */
-.btn-view {
-    background: #00d2ff;
-    color: #000;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 12px;
-    transition: 0.3s;
-}
-
-.btn-approve {
-    background: #00ff88;
-    color: #000;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 12px;
-    transition: 0.3s;
-}
-
-.btn-view:hover { opacity: 0.8; }
-.btn-approve:hover { opacity: 0.8; }
-.btn-approve:disabled { background: #475569; cursor: not-allowed; opacity: 0.5; }
-
-/* Badges */
-.badge {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-}
-.badge.pending { background: #f59e0b; color: #000; }
-.badge.done { background: #10b981; color: #fff; }
-
-/* Image Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    max-width: 80%;
-    max-height: 80%;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0,255,136,0.3);
-}
-
-.close-modal {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #fff;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* Layout Helpers */
-.action-group {
-    display: flex;
-    gap: 8px;
-}
-
-/* Reset Button Style */
-.btn-reset {
-    background: #f59e0b;
-    color: #000;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 12px;
-    transition: 0.3s;
-}
-
-/* Delete Button Style */
-.btn-delete {
-    background: #ef4444;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 12px;
-    transition: 0.3s;
-}
-
-.btn-reset:hover { opacity: 0.8; }
-.btn-delete:hover { opacity: 0.8; }
-
-/* --- Print කරන විට පමණක් ක්‍රියාත්මක වන CSS --- */
-@media print {
-    /* 1. මුළු පිටුවේම බැක්ග්‍රවුන්ඩ් එක සුදු කරලා, අකුරු කළු කරනවා (මිනුම් ලස්සනට පේන්න) */
-    body {
-        background: #ffffff !important;
-        color: #000000 !important;
-        font-family: sans-serif;
-        padding: 0;
-        margin: 10mm; /* පිටුවේ මායිම් (Margins) */
+    if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">No orders found.</td></tr>`;
+        return;
     }
 
-    /* 2. ඇඩ්මින් පැනල් එකේ තියෙන මාතෘකා, විස්තර සහ close බටන්ස් හයිඩ් කරනවා */
-    h1, h2, p, .admin-desc, .close-btn, #slipModal {
-        display: none !important;
-    }
+    data.forEach(order => {
+        const tr = document.createElement("tr");
+        
+        let slipButton = "No Slip";
+        if (order.slipUrl && order.slipUrl !== "No Slip") {
+            slipButton = `<button class="btn-view" onclick="openSlipModal('${order.slipUrl}')">View Slip</button>`;
+        }
 
-    /* 3. වගුවේ පසුබිම් කළු පාටවල් අයින් කරලා සාමාන්‍ය වගුවක් බවට පත් කරනවා */
-    table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        margin-top: 0 !important;
-        box-shadow: none !important;
-    }
+        let actionButtons = "";
+        if (order.status.toLowerCase() === "done") {
+            actionButtons = `
+                <button class="btn-reset" onclick="updateStatus('${order.admission}', 'Pending', this)">Reset</button>
+                <button class="btn-delete" onclick="deleteOrder('${order.admission}', this)">Delete</button>
+            `;
+        } else {
+            actionButtons = `
+                <button class="btn-approve" onclick="updateStatus('${order.admission}', 'Done', this)">Approve</button>
+                <button class="btn-delete" onclick="deleteOrder('${order.admission}', this)">Delete</button>
+            `;
+        }
 
-    th, td {
-        border: 1px solid #333333 !important; /* කළු පාට බෝඩර් වැටෙනවා */
-        padding: 8px !important;
-        color: #000000 !important;
-        background: transparent !important;
-        font-size: 12px !important;
-    }
+        tr.innerHTML = `
+            <td>${order.admission}</td>
+            <td>${order.name}</td>
+            <td>${order.class}</td>
+            <td>${order.phone}</td>
+            <td><span style="color:#00ff88; font-weight:bold;">${order.size}</span></td>
+            <td>${order.method.toUpperCase()}</td>
+            <td>${slipButton}</td>
+            <td><span class="badge ${order.status.toLowerCase()}">${order.status}</span></td>
+            <td><div class="action-group">${actionButtons}</div></td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
 
-    th {
-        background-color: #f2f2f2 !important; /* Column headers වලට ලස්සන අළු පාටක් */
-        font-weight: bold !important;
-    }
+// --- 2. Status Update ---
+async function updateStatus(admissionNo, newStatus, button) {
+    const actionText = newStatus === 'Done' ? 'approve' : 'reset to pending';
+    if (!confirm(`Are you sure you want to ${actionText} this order?`)) return;
 
-    /* 🚨 4. වැදගත්ම කොටස: Slip බටන් එක තියෙන Column එක (7 වෙනි එක) සහ Buttons තියෙන Column එක (9 වෙනි එක) සම්පූර්ණයෙන්ම අයින් කරනවා */
-    table th:nth-child(7), table td:nth-child(7), /* Slip Column */
-    table th:nth-child(9), table td:nth-child(9) { /* Action Buttons Column */
-        display: none !important;
-    }
+    button.disabled = true;
+    button.innerText = "...";
 
-    /* 5. Status Badge එක (Pending/Done) සාමාන්‍ය අකුරු විදිහට කළු පාටින් පෙන්වීම */
-    .badge {
-        background: transparent !important;
-        color: #000000 !important;
-        border: none !important;
-        padding: 0 !important;
-        font-weight: bold;
-    }
+    try {
+        const formData = new FormData();
+        formData.append("action", "updateStatus");
+        formData.append("Admission", admissionNo);
+        formData.append("Status", newStatus);
 
-    /* 6. ටී-ෂර්ට් සයිස් එක (M, L, XL) හොඳට කැපී පේන්න බෝල්ඩ් කිරීම */
-    td span {
-        color: #000000 !important;
-        font-weight: bold !important;
+        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+        alert("Order updated successfully!");
+        fetchOrders(); 
+    } catch (error) {
+        alert("Error, try again.");
+        fetchOrders();
+    }
+}
+
+// --- 3. Delete Order ---
+async function deleteOrder(admissionNo, button) {
+    if (!confirm("⚠️ Permanent Delete?")) return;
+
+    button.disabled = true;
+    button.innerText = "...";
+
+    try {
+        const formData = new FormData();
+        formData.append("action", "deleteOrder");
+        formData.append("Admission", admissionNo);
+
+        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+        alert("Deleted successfully!");
+        fetchOrders(); 
+    } catch (error) {
+        alert("Error, try again.");
+        fetchOrders();
+    }
+}
+
+// --- 4. Modal Preview ---
+// --- 4. Modal Preview (Google Drive ලින්ක් එක Direct Link එකක් බවට හරවා පෙන්වීම) ---
+function openSlipModal(url) {
+    const modal = document.getElementById("slipModal");
+    const modalImg = document.getElementById("modalImage");
+    
+    if (!modal || !modalImg) return;
+
+    modal.style.display = "flex";
+    modalImg.src = ""; // පරණ පින්තූරය අයින් කර හිස් කරයි
+
+    // 💡 Google Drive ලින්ක් එකෙන් File ID එක වෙන් කරගෙන Direct Link එකක් හදනවා
+    if (url.includes("drive.google.com")) {
+        const fileId = url.split("/d/")[1].split("/")[0];
+        const directLink = `https://lh3.googleusercontent.com/d/${fileId}`;
+        modalImg.src = directLink;
+    } else {
+        modalImg.src = url; // සාමාන්‍ය ලින්ක් එකක් නම් එහෙම්ම දමයි
+    }
+}
+function closeSlipModal() {
+    document.getElementById("slipModal").style.display = "none";
+}
+
+// 💡 පරණ කෝඩ් වලට බාධාවක් නොවන පරිදි අලුතින්ම එකතු කළ Login Function එක
+function checkLogin() {
+    const inputPass = document.getElementById("adminPassInput").value;
+    const correctPass = "RajansTech27"; // 💡 ඔයාට කැමති පාස්වර්ඩ් එකක් මෙතනට දෙන්න මචං
+
+    if (inputPass === correctPass) {
+        document.getElementById("loginBox").style.display = "none"; // Login box එක හයිඩ් කරනවා
+        document.getElementById("adminContent").style.display = "block"; // වගුව සහ අනෙක් හැමදේම පෙන්වනවා
+        
+        // 💡 පාස්වර්ඩ් එක හරි නම් විතරක් ඔයාගේ පරණ function එක මෙතනදී කෝල් වෙනවා
+        fetchOrders(); 
+    } else {
+        alert("Incorrect Password! Try again.");
     }
 }
