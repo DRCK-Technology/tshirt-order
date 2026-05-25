@@ -163,3 +163,64 @@ tr:hover {
 
 .btn-reset:hover { opacity: 0.8; }
 .btn-delete:hover { opacity: 0.8; }
+
+/* --- Print කරන විට පමණක් ක්‍රියාත්මක වන CSS --- */
+@media print {
+    /* 1. මුළු පිටුවේම බැක්ග්‍රවුන්ඩ් එක සුදු කරලා, අකුරු කළු කරනවා (මිනුම් ලස්සනට පේන්න) */
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: sans-serif;
+        padding: 0;
+        margin: 10mm; /* පිටුවේ මායිම් (Margins) */
+    }
+
+    /* 2. ඇඩ්මින් පැනල් එකේ තියෙන මාතෘකා, විස්තර සහ close බටන්ස් හයිඩ් කරනවා */
+    h1, h2, p, .admin-desc, .close-btn, #slipModal {
+        display: none !important;
+    }
+
+    /* 3. වගුවේ පසුබිම් කළු පාටවල් අයින් කරලා සාමාන්‍ය වගුවක් බවට පත් කරනවා */
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin-top: 0 !important;
+        box-shadow: none !important;
+    }
+
+    th, td {
+        border: 1px solid #333333 !important; /* කළු පාට බෝඩර් වැටෙනවා */
+        padding: 8px !important;
+        color: #000000 !important;
+        background: transparent !important;
+        font-size: 12px !important;
+    }
+
+    th {
+        background-color: #f2f2f2 !important; /* Column headers වලට ලස්සන අළු පාටක් */
+        font-weight: bold !important;
+    }
+
+    /* 🚨 4. වැදගත්ම කොටස: Slip බටන් එක තියෙන Column එක (7 වෙනි එක) සහ Buttons තියෙන Column එක (9 වෙනි එක) සම්පූර්ණයෙන්ම අයින් කරනවා */
+    table th:nth-child(7), table td:nth-child(7), /* Slip Column */
+    table th:nth-child(9), table td:nth-child(9) { /* Action Buttons Column */
+        display: none !important;
+    }
+
+    /* 5. Status Badge එක (Pending/Done) සාමාන්‍ය අකුරු විදිහට කළු පාටින් පෙන්වීම */
+    .badge {
+        background: transparent !important;
+        color: #000000 !important;
+        border: none !important;
+        padding: 0 !important;
+        font-weight: bold;
+    }
+
+    /* 6. ටී-ෂර්ට් සයිස් එක (M, L, XL) හොඳට කැපී පේන්න බෝල්ඩ් කිරීම */
+    td span {
+        color: #000000 !important;
+        font-weight: bold !important;
+    }
+}
