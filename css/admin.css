@@ -224,3 +224,9 @@ tr:hover {
         font-weight: bold !important;
     }
 }
+
+#refreshBtn:hover {
+    background: #00ff88 !important;
+    color: #000000 !important;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
