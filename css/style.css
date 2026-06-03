@@ -1,12 +1,11 @@
-/* Custom Font එක Link කිරීම */
+
 @font-face {
     font-family: 'MyCustomFont';
-    src: url('fonts\BAUHS93.TTF') format('woff2'); /* ඔයාගේ font file path එක මෙතනට දෙන්න */
+    src: url('fonts\BAUHS93.TTF') format('woff2'); 
     font-weight: normal;
     font-style: normal;
 }
 
-/* මුළු වෙබ් අඩවියටම Font එක Apply කිරීම */
 * {
     font-family: 'MyCustomFont', sans-serif !important;
 }
@@ -26,7 +25,7 @@ body {
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
-    overflow-y: auto; /* මේක තියෙන්නම ඕනේ */
+    overflow-y: auto; 
 }
 
 /* Background Blobs */
@@ -70,16 +69,14 @@ body {
     animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Layout එක මැදට ගන්න මේ style එක වැදගත් */
-/* පියවරවල් පෙන්වන ආකාරය */
 .step.active {
     display: flex !important;
-    flex-direction: column; /* එක යට එක ලස්සනට තියෙන්න */
+    flex-direction: column; 
     justify-content: center;
     align-items: center;
-    min-height: 90vh; /* Screen එකේ ඉඩ ගන්න */
+    min-height: 90vh; 
     width: 100%;
-    overflow-y: auto; /* scroll වෙන්න ඕනේ නම් විතරක් scroll වේවි */
+    overflow-y: auto; 
     padding: 20px 0;
 }
 
@@ -90,20 +87,19 @@ body {
 
 /* Header Pill */
 .pill {
-    background: rgba(255, 255, 255, 0.05); /* තවත් විනිවිද පෙනෙන ලෙස */
+    background: rgba(255, 255, 255, 0.05); 
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 12px 35px;
     border-radius: 100px;
-    display: inline-flex; /* content එකේ ප්‍රමාණයට හැඩ ගැසීමට */
+    display: inline-flex; 
     align-items: center;
     gap: 18px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     transition: all 0.4s ease;
 }
 
-/* Pill එක උඩට mouse එක ගෙනිච්චම වෙන වෙනස */
 /* .pill:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.3);
@@ -114,13 +110,12 @@ body {
     font-size: 16px;
     font-weight: 600;
     font-family: MyCustomFont;
-    text-transform: uppercase; /* කැපිටල් අකුරින් වඩාත් පිරිසිදු පෙනුමක් එයි */
-    letter-spacing: 1.5px; /* අකුරු අතර පරතරය */
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
     color: rgba(255, 255, 255, 0.95);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-/* ලෝගෝ දෙකේ පෙනුම */
 .pill-logo {
     width: 28px;
     height: 28px;
@@ -155,7 +150,7 @@ body {
     border-radius: 50px;
     font-size: 11px;
     letter-spacing: 2px;
-    color: #00d2ff; /* ලස්සන Cyan පාටක් */
+    color: #00d2ff;
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -173,8 +168,8 @@ body {
     font-size: 1.8rem;
     font-weight: 300;
     background: linear-gradient(to right, #fff, #888);
-    -webkit-background-clip: text;  /* Chrome, Safari සඳහා */
-    background-clip: text;          /* Standard (Firefox සහ අලුත් Browser සඳහා) */
+    -webkit-background-clip: text;  
+    background-clip: text;          
     -webkit-text-fill-color: transparent;
     display: block;
 }
@@ -189,7 +184,6 @@ body {
     }
 }
 
-/* පණිවිඩය උඩ සිට පහළට එන animation එක */
 @keyframes fadeInDown {
     from {
         opacity: 0;
@@ -227,20 +221,18 @@ body {
 
 .liquid-btn:hover { transform: scale(1.05); }
 
-/* Placeholder අකුරු පැහැදිලිව පෙනෙන්න */
 input::placeholder {
-    color: rgba(255, 255, 255, 0.7); /* සුදු පැහැය 70% opacity එකකින් */
+    color: rgba(255, 255, 255, 0.7); 
     font-weight: 500;
 }
 
-/* User type කරන අකුරු පැහැදිලිව පෙනෙන්න */
 input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.1); /* පසුබිම ටිකක් තද කළා */
+    background: rgba(255, 255, 255, 0.1); 
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 18px;
     padding: 18px;
-    color: #ffffff; /* Type කරන අකුරු සම්පූර්ණ සුදු පාටින් */
+    color: #ffffff; 
     font-size: 16px;
     outline: none;
     margin-bottom: 15px;
@@ -258,7 +250,6 @@ input, select {
     outline: none;
 }
 
-/* Select Box එකේ පෙනුම */
 select {
     width: 100%;
     padding: 12px;
@@ -270,55 +261,54 @@ select {
     backdrop-filter: blur(10px);
     cursor: pointer;
     outline: none;
-    appearance: none; /* Browser එකේ default ඊතලය අයින් කරයි */
+    appearance: none; 
     -webkit-appearance: none;
 }
 /* chip box */
+/* --- Size Selector Layout Update --- */
 .size-selector {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin: 30px 0;
-    flex-wrap: wrap;
+    gap: 10px;          
+    margin: 25px 0;
+    flex-wrap: wrap;    
 }
 
 .size-chip {
-    width: 60px;
-    height: 60px;
+    width: 55px;        
+    height: 55px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
-    border-radius: 15px;
+    border-radius: 12px;
     color: white;
     font-weight: 600;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .size-chip:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
-/* Select කළ පසු පෙනුම */
 .size-chip.active {
     background: white;
     color: #1a1a2e;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     border-color: white;
 }
 /* chip box end */
-/* Dropdown එක ඇතුළේ තියෙන Options ලස්සන කිරීම */
 select option {
-    background: #1a1a2e; /* Card එකේ background එකට ගැලපෙන තද පාටක් */
+    background: #1a1a2e;
     color: white;
     padding: 10px;
 }
 
-/* Hover කරන කොට පේන පාට */
 select option:hover {
     background: rgba(255, 255, 255, 0.2);
 }
@@ -349,9 +339,8 @@ select option:hover {
 
 .back-btn:hover {
     background: rgba(255, 255, 255, 0.15);
-    transform: translateX(-5px); /* වමට පොඩ්ඩක් move වෙන animation එකක් */
+    transform: translateX(-5px); 
 }
-
 .back-btn svg {
     stroke: white;
 }
@@ -366,8 +355,8 @@ h2 { margin-bottom: 30px; font-size: 24px; }
     top: 0; left: 0;
     width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(15px); /* පිටුපස blur කරන කොටස */
-    display: none; /* පෙන්වන්න අවශ්‍ය වෙලාවට විතරක් active කරනවා */
+    backdrop-filter: blur(15px); 
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 2000;
@@ -416,17 +405,16 @@ h2 { margin-bottom: 30px; font-size: 24px; }
 /* --- Mobile Responsiveness (Mainly for Phones) --- */
 @media screen and (max-width: 600px) {
     
-    /* Pill එක mobile එකට ගැලපෙන ලෙස කුඩා කිරීම */
     .pill {
         margin-left: 20px;
         padding: 8px 15px;
         gap: 10px;
-        width: 90%; /* Screen එකේ දෙපැත්තට හිර නොවී පේන්න */
+        width: 90%; 
         justify-content: center;
     }
 
     .pill span {
-        font-size: 13px; /* අකුරු පොඩ්ඩක් කුඩා කළා */
+        font-size: 13px; 
         letter-spacing: 1px;
         line-height: 1.2;
         text-align: center;
@@ -437,14 +425,12 @@ h2 { margin-bottom: 30px; font-size: 24px; }
         height: 22px;
     }
 
-    /* T-shirt එක screen එකට ගැලපෙන්න size කිරීම */
     .tshirt-mockup img {
         width: 100%;
         max-width: 320px;
         margin: 20px 0;
     }
 
-    /* Card එකේ padding පොඩ්ඩක් අඩු කිරීම */
     .liquid-card {
         padding: 30px 20px;
         width: 95%;
@@ -456,9 +442,8 @@ h2 { margin-bottom: 30px; font-size: 24px; }
         margin-bottom: 20px;
     }
 
-    /* Buttons සහ Inputs mobile එකට පහසු ලෙස සකස් කිරීම */
     .liquid-btn {
-        width: 100%; /* Mobile වලදී button එක සම්පූර්ණ පළලට ගැනීම පහසුයි */
+        width: 100%; 
         padding: 15px 0;
         font-size: 16px;
     }
@@ -468,14 +453,12 @@ h2 { margin-bottom: 30px; font-size: 24px; }
         font-size: 14px;
     }
 
-    /* Back button එකේ පිහිටීම */
     .back-nav {
         max-width: 95%;
         margin-bottom: 10px;
     }
 }
 
-/* --- Delayed Order Now Button Animation (ID එක පාවිච්චි කර ඇත) --- */
 
 #orderNowBtn {
     opacity: 0;
@@ -504,13 +487,11 @@ h2 { margin-bottom: 30px; font-size: 24px; }
     }
 }
 
-/* මේ button එකට විතරක් hover effects වෙනම ඕනෙ නම් මෙහෙම ගන්නත් පුළුවන් */
 #orderNowBtn:hover {
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
 }
 
-/* Preview Modal එක */
 .modal {
     display: none; 
     position: fixed;
@@ -520,11 +501,10 @@ h2 { margin-bottom: 30px; font-size: 24px; }
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(15px); /* පිටුපස ලස්සනට blur කරයි */
+    backdrop-filter: blur(15px);
     cursor: zoom-out;
 }
 
-/* රූපය මතු වන විදිහ */
 .modal-content {
     margin: auto;
     display: block;
@@ -556,7 +536,6 @@ h2 { margin-bottom: 30px; font-size: 24px; }
     margin: 20px 0;
 }
 
-/* Payment Option එකේ සම්පූර්ණ Box එක */
 .pay-option {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -565,33 +544,29 @@ h2 { margin-bottom: 30px; font-size: 24px; }
     margin-bottom: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex; /* මේකෙන් තමයි තිතයි අකුරුයි එක පේළියට ගන්නේ */
+    display: flex; 
     align-items: center;
-    gap: 15px; /* තිත සහ අකුරු අතර පරතරය */
+    gap: 15px; 
 }
 
-/* Radio button එක (සුදු තිත) පොඩ්ඩක් ලස්සන කරන්න */
 .pay-option input[type="radio"] {
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: #00d2ff; /* Select වුණාම ලස්සන නිල් පාටක් එනවා */
+    accent-color: #00d2ff; 
 }
 
-/* Option එක උඩට mouse එක ගෙනියද්දී */
 .pay-option:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Select වුණාම highlight වෙන විදිහ */
 .pay-option.active-pay {
     background: rgba(0, 210, 255, 0.1);
     border-color: #00d2ff;
     box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
 }
 
-/* බැංකු විස්තර පෙන්වන Card එක */
 .bank-info-card {
     background: rgba(255, 255, 255, 0.08);
     border-left: 4px solid #00d2ff;
@@ -621,28 +596,3 @@ h2 { margin-bottom: 30px; font-size: 24px; }
     border-color: #00d2ff;
 }
 
-/* සියලුම පියවරවල් සාමාන්‍යයෙන් හංගලා තියෙන්න ඕනේ 
-.step {
-    display: none;
-    animation: fadeIn 0.5s ease;
-}
-
-/* active කියන class එක තියෙන පියවර විතරක් පේන්න ඕනේ 
-.step.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}*/
-
-/* Radio options වල සාමාන්‍ය පෙනුම */
-
-
-/* Mouse එක ගෙනියද්දී */
-
-/* තෝරපු option එක highlight කරන විදිහ */
-
-
-/* File Upload එක ලස්සන කරන්න */
