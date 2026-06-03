@@ -19,7 +19,45 @@
     <div class="admin-container">
         <h2>Tech Batch - T-Shirt Orders Admin</h2>
         <p>Manage student orders, view payment slips, and approve status live.</p>
+        <!-- <div class="admin-container">
+        <h2>Tech Batch - T-Shirt Orders Admin</h2>
+        <p>Manage student orders, view payment slips, and approve status live.</p> -->
         
+        <div class="summary-wrapper">
+            <div class="summary-card total-card">
+                <h3>Total Orders</h3>
+                <div class="count-value" id="sumTotalOrders">0</div>
+            </div>
+
+            <div class="summary-card sizes-card">
+                <h3>Size Requirements Count</h3>
+                <div class="sizes-grid">
+                    <div class="size-box"><span>XS</span><strong id="sizeXS">0</strong></div>
+                    <div class="size-box"><span>S</span><strong id="sizeS">0</strong></div>
+                    <div class="size-box"><span>M</span><strong id="sizeM">0</strong></div>
+                    <div class="size-box"><span>L</span><strong id="sizeL">0</strong></div>
+                    <div class="size-box"><span>XL</span><strong id="sizeXL">0</strong></div>
+                    <div class="size-box"><span>XXL</span><strong id="sizeXXL">0</strong></div>
+                    <div class="size-box"><span>3XL</span><strong id="size3XL">0</strong></div>
+                    <div class="size-box"><span>4XL</span><strong id="size4XL">0</strong></div>
+                </div>
+            </div>
+
+            <div class="summary-card payment-card">
+                <h3>Payment Methods</h3>
+                <div class="pay-info-row">
+                    <span>💸 Cash Transfer:</span>
+                    <strong id="sumCash">0</strong>
+                </div>
+                <div class="pay-info-row">
+                    <span>🏦 Bank / Slip:</span>
+                    <strong id="sumBank">0</strong>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: right; max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+            
+        </div>
         <div style="text-align: right; max-width: 1200px; margin: 20px auto; padding: 0 20px;">
             <button onclick="refreshTableOnly()" id="refreshBtn" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #00ff88; background: transparent; color: #00ff88; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.3s;">
                 🔄 Refresh Table
