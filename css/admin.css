@@ -164,23 +164,20 @@ tr:hover {
 .btn-reset:hover { opacity: 0.8; }
 .btn-delete:hover { opacity: 0.8; }
 
-/* --- Print කරන විට පමණක් ක්‍රියාත්මක වන CSS --- */
+/* --- CSS that only works when printing --- */
 @media print {
-    /* 1. මුළු පිටුවේම බැක්ග්‍රවුන්ඩ් එක සුදු කරලා, අකුරු කළු කරනවා (මිනුම් ලස්සනට පේන්න) */
     body {
         background: #ffffff !important;
         color: #000000 !important;
         font-family: sans-serif;
         padding: 0;
-        margin: 10mm; /* පිටුවේ මායිම් (Margins) */
+        margin: 10mm; /*(Margins) */
     }
 
-    /* 2. ඇඩ්මින් පැනල් එකේ තියෙන මාතෘකා, විස්තර සහ close බටන්ස් හයිඩ් කරනවා */
     h1, h2, p, .admin-desc, .close-btn, #slipModal, #refreshBtn {
         display: none !important;
     }
 
-    /* 3. වගුවේ පසුබිම් කළු පාටවල් අයින් කරලා සාමාන්‍ය වගුවක් බවට පත් කරනවා */
     table {
         width: 100% !important;
         border-collapse: collapse !important;
@@ -191,7 +188,7 @@ tr:hover {
     }
 
     th, td {
-        border: 1px solid #333333 !important; /* කළු පාට බෝඩර් වැටෙනවා */
+        border: 1px solid #333333 !important; 
         padding: 8px !important;
         color: #000000 !important;
         background: transparent !important;
@@ -199,17 +196,15 @@ tr:hover {
     }
 
     th {
-        background-color: #f2f2f2 !important; /* Column headers වලට ලස්සන අළු පාටක් */
+        background-color: #f2f2f2 !important;
         font-weight: bold !important;
     }
 
-    /* 🚨 4. වැදගත්ම කොටස: Slip බටන් එක තියෙන Column එක (7 වෙනි එක) සහ Buttons තියෙන Column එක (9 වෙනි එක) සම්පූර්ණයෙන්ම අයින් කරනවා */
     table th:nth-child(7), table td:nth-child(7), /* Slip Column */
     table th:nth-child(9), table td:nth-child(9) { /* Action Buttons Column */
         display: none !important;
     }
 
-    /* 5. Status Badge එක (Pending/Done) සාමාන්‍ය අකුරු විදිහට කළු පාටින් පෙන්වීම */
     .badge {
         background: transparent !important;
         color: #000000 !important;
@@ -218,7 +213,6 @@ tr:hover {
         font-weight: bold;
     }
 
-    /* 6. ටී-ෂර්ට් සයිස් එක (M, L, XL) හොඳට කැපී පේන්න බෝල්ඩ් කිරීම */
     td span {
         color: #000000 !important;
         font-weight: bold !important;
@@ -229,4 +223,205 @@ tr:hover {
     background: #00ff88 !important;
     color: #000000 !important;
     box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* --- Dashboard Cards Styles --- */
+.dashboard-container {
+    display: flex;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto 20px auto; 
+    padding: 15px 20px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-family: sans-serif;
+    border-radius: 10px;
+
+    position: sticky;
+    top: 0;                
+    z-index: 100;          
+    background: #111625 !important;
+}
+
+.dash-card {
+    flex: 1;
+    min-width: 110px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.dash-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dash-card h4 {
+    color: #888;
+    margin: 0;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.dash-card p {
+    color: #ffffff;
+    margin: 5px 0 0 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.total-card {
+    border-color: rgba(0, 255, 136, 0.3);
+}
+
+.total-card p {
+    color: #00ff88;
+    font-size: 28px;
+}
+
+/* ==========================================================================
+   🎯 SUMMARY DASHBOARD STYLING (LIQUID GLASS THEME)
+   ========================================================================== */
+
+.summary-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 20px auto 30px auto;
+    padding: 0 5px;
+    
+    /*(Sticky Effect) */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    /* background: #0f172a !important; */
+    padding-bottom: 15px;
+    /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
+}
+
+@media (max-width: 992px) {
+    .summary-wrapper {
+        grid-template-columns: 1fr;
+        position: relative; 
+    }
+}
+
+.summary-card {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.summary-card h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 6px;
+    font-weight: 600;
+}
+
+.total-card {
+    border-color: rgba(0, 255, 136, 0.2) !important;
+}
+
+.count-value {
+    font-size: 46px;
+    font-weight: bold;
+    color: #00ff88;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
+    text-align: center;
+    margin: 5px 0;
+}
+
+.sizes-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 8px;
+}
+
+@media (max-width: 480px) {
+    .sizes-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.size-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 6px;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.size-box:hover {
+    background: rgba(0, 210, 255, 0.05);
+    border-color: rgba(0, 210, 255, 0.2);
+}
+
+.size-box span {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.size-box strong {
+    font-size: 18px;
+    color: #00d2ff; 
+    margin-top: 2px;
+}
+
+/* 5. Payment Methods */
+.pay-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.pay-info-row:last-child {
+    border-bottom: none;
+}
+
+.pay-info-row span {
+    color: #e2e8f0;
+}
+
+.pay-info-row strong {
+    color: #ff007f; 
+    font-size: 18px;
+    text-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
+}
+
+@media print {
+    .summary-wrapper, .summary-card, .sizes-grid, .size-box {
+        display: none !important;
+    }
 }
