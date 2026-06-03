@@ -1,13 +1,10 @@
 const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
 
 function selectSize(size) {
-    // 1. සියලුම chips වලින් 'active' class එක අයින් කරනවා
-    // (ඔයාගේ CSS එකේ තියෙන්නේ .active නිසා මෙතනත් .active ම පාවිච්චි කරනවා)
     document.querySelectorAll('.size-chip').forEach(chip => {
         chip.classList.remove('active');
     });
 
-    // 2. ක්ලික් කරපු chip එක සොයාගෙන ඒකට 'active' class එක දානවා
     const chips = document.querySelectorAll('.size-chip');
     chips.forEach(chip => {
         if(chip.innerText === size) {
@@ -16,18 +13,17 @@ function selectSize(size) {
         }
     });
 
-    // 3. Hidden input එකට අගය දානවා
     const hiddenInput = document.getElementById('finalSize');
     if (hiddenInput) {
         hiddenInput.value = size;
     }
 }
 
-// --- 1. පියවර මාරු කිරීම (Navigation) ---
+// --- 1.  (Navigation) ---
 function nextStep(step) {
     document.querySelectorAll('.step').forEach(s => {
         s.classList.remove('active');
-        s.style.display = 'none'; // සහතික වෙන්න පරණ ඒව පේන්නේ නෑ කියලා
+        s.style.display = 'none'; 
     });
     
     const target = document.getElementById('step' + step);
@@ -45,10 +41,9 @@ function prevStep() {
     }
 }
 
-// --- 2. දත්ත පරීක්ෂා කර ඊළඟට යාම (Validation) ---
+// --- 2.  (Validation) ---
 function validateAndNext(step) {
     if (step === 2) {
-        // Details පරීක්ෂාව
         const name = document.getElementById('name').value;
         const admission = document.getElementById('admissionNo').value;
         const className = document.getElementById('class').value;
@@ -58,19 +53,18 @@ function validateAndNext(step) {
             showAlert("Please fill in all your details!", "error");
             return;
         }
-        nextStep(3); // Size Chart එකට යනවා
+        nextStep(3); 
     } else if (step === 4) {
-        // Size පරීක්ෂාව
         const size = document.getElementById('finalSize').value;
         if (!size) {
             showAlert("Please select a T-shirt size!", "error");
             return;
         }
-        nextStep(5); // Payment එකට යනවා
+        nextStep(5); 
     }
 }
 
-// --- 3. ගෙවීම් ක්‍රමය අනුව විස්තර පෙන්වීම ---
+// --- 3. Payment ---
 function togglePaymentDetails(method) {
     const bankArea = document.getElementById('bankDetailsArea');
     const cashArea = document.getElementById('cashDetailsArea');
@@ -84,7 +78,7 @@ function togglePaymentDetails(method) {
     }
 }
 
-// --- 4. Slip එක තේරූ පසු නම පෙන්වීම ---
+// --- 4. Slip  ---
 function updateFileName() {
     const fileInput = document.getElementById('slipFile');
     const fileNameDisplay = document.getElementById('file-name-text');
@@ -94,13 +88,9 @@ function updateFileName() {
     }
 }
 
-// --- 5. ඇණවුම යැවීම (Final Submission) ---
-// --- 5. ඇණවුම යැවීම (Final Submission) ---
-// --- 5. ඇණවුම යැවීම (Final Submission - Fast Upload සමඟ) ---
 async function submitOrder() {
     const currentScriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; 
 
-    // 1. දත්ත ටික ගන්නවා
     const name = document.getElementById('name').value;
     const admissionNo = document.getElementById('admissionNo').value;
     const className = document.getElementById('class').value;
@@ -114,14 +104,12 @@ async function submitOrder() {
         return;
     }
 
-    // 3. Button එක Disable කිරීම
     const submitBtn = document.querySelector(".btn-group button");
     if(submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerText = "Compressing & Sending...";
     }
 
-    // 4. දත්ත ටික Form එකක් විදිහට හදනවා
     const formData = new FormData();
     formData.append("Name", name);
     formData.append("Admission", admissionNo); 
@@ -130,7 +118,6 @@ async function submitOrder() {
     formData.append("Size", finalSize);        
     formData.append("Method", selectedPayment.value);
 
-    // 5. Slip එකක් තියෙනවා නම් ඒක බ්‍රවුසර් එකෙන්ම Compress කරලා එකතු කරනවා
     const fileInput = document.getElementById('slipFile');
     if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
@@ -139,12 +126,10 @@ async function submitOrder() {
         reader.onload = function(event) {
             const img = new Image();
             img.onload = async function() {
-                // Canvas එකක් ආධාරයෙන් පින්තූරය කුඩා කිරීම
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
 
-                // උපරිම පළල 1024px වෙන පරිදි රිසයිස් කිරීම
                 const MAX_WIDTH = 1024;
                 if (width > MAX_WIDTH) {
                     height *= MAX_WIDTH / width;
@@ -156,7 +141,6 @@ async function submitOrder() {
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
 
-                // Quality එක 0.7 (70%) කට අඩු කරලා Base64 දත්ත ලබාගැනීම
                 const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
 
                 formData.append("slipFile", compressedBase64);
@@ -169,17 +153,16 @@ async function submitOrder() {
         };
         reader.readAsDataURL(file);
     } else {
-        await finalFetch(currentScriptURL, formData);
+        checkDuplicateAndSubmit(admissionNo, formData, submitBtn);
     }
 }
 
 async function finalFetch(url, data) {
     try {
-        // වැදගත්ම කොටස: POST Request එක
         await fetch(url, { 
             method: 'POST', 
             body: data,
-            mode: 'no-cors' // Google Script වලට මේක අත්‍යවශ්‍යයි
+            mode: 'no-cors' 
         });
         
         showAlert("Success! Your order has been placed.", "success");
@@ -205,13 +188,16 @@ async function sendDataToSheet(formData) {
 }
 
 // --- 6. Alerts & Previews ---
+// --- 6. Alerts & Previews ---
 function showAlert(message, type) {
+    if (!message) return; // 💡 [FIX] - මැසේජ් එකක් නැත්නම් alert එක display කරන්නේම නැහැ!
+
     const alertOverlay = document.getElementById('customAlert');
     const alertIcon = document.getElementById('alertIcon');
     document.getElementById('alertMessage').innerText = message;
     
     alertIcon.innerText = (type === "success") ? "✅" : "⚠️";
-    alertOverlay.style.display = 'flex';
+    alertOverlay.style.display = 'flex'; // අවශ්‍ය වෙලාවට විතරක් flex වෙලා පෙනෙන්න ගනීවි
 }
 
 function closeAlert() {
@@ -229,3 +215,36 @@ function closePreview() {
     document.getElementById("imageModal").style.display = "none";
 }
 
+function checkDuplicateAndSubmit(admissionNo, formData, submitBtn) {
+    const targetAdmission = admissionNo.toString().trim();
+    const script = document.createElement('script');
+    
+    window.handleDuplicateCheck = function(data) {
+        const isDuplicate = data.some(order => order.admission.toString().trim() === targetAdmission);
+
+        if (isDuplicate) {
+            showAlert("⚠️ This Admission Number has already placed an order! Duplicates are not allowed.", "error");
+            
+            const alertOverlay = document.getElementById('customAlert');
+            if (alertOverlay) {
+                const alertBtn = alertOverlay.querySelector(".liquid-btn") || alertOverlay.querySelector("button");
+                
+                if (alertBtn) {
+                    alertBtn.onclick = function() {
+                        alertOverlay.style.display = 'none';
+                        location.reload(); 
+                    };
+                }
+            }
+        } else {
+            const currentScriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec';
+            finalFetch(currentScriptURL, formData);
+        }
+        
+        document.body.removeChild(script);
+        delete window.handleDuplicateCheck;
+    };
+
+    script.src = `${scriptURL}?action=read&callback=handleDuplicateCheck`;
+    document.body.appendChild(script);
+}
