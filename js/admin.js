@@ -1,22 +1,23 @@
 const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec';
 
 
-// --- 1. Data Fetch කිරීම (CORS බ්ලොක් නොවී JSONP ක්‍රමයට) ---
 function fetchOrders() {
     const tbody = document.getElementById("adminTableBody");
     tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px;">Loading orders...</td></tr>`;
 
-    // කලින් තිබ්බ fetch එක වෙනුවට ලේසිම JSONP ක්‍රමය පාවිච්චි කිරීම
     const script = document.createElement('script');
     script.src = `${scriptURL}?action=read&callback=handleResponse`;
     document.body.appendChild(script);
-    document.body.removeChild(script); // කෝඩ් එක රන් වුණාම Script tag එක අයින් කරයි
+    document.body.removeChild(script); 
 }
 
-// Google Sheet එකෙන් ඩේටා ටික ආවම රන් වෙන Function එක
 function handleResponse(data) {
     const tbody = document.getElementById("adminTableBody");
     tbody.innerHTML = ""; 
+
+    let totalOrders = 0;
+    let countXS = 0, countS = 0, countM = 0, countL = 0, countXL = 0, countXXL = 0, count3XL = 0, count4XL = 0;
+    let countCash = 0, countBank = 0;
 
     if (data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">No orders found.</td></tr>`;
@@ -24,6 +25,23 @@ function handleResponse(data) {
     }
 
     data.forEach(order => {
+        totalOrders++; 
+
+        const orderSize = order.size ? order.size.toUpperCase().trim() : '';
+        if (orderSize === 'XS') countXS++;
+        else if (orderSize === 'S') countS++;
+        else if (orderSize === 'M') countM++;
+        else if (orderSize === 'L') countL++;
+        else if (orderSize === 'XL') countXL++;
+        else if (orderSize === 'XXL') countXXL++;
+        else if (orderSize === '3XL') count3XL++;
+        else if (orderSize === '4XL') count4XL++;
+
+        
+        const payMethod = order.method ? order.method.toLowerCase().trim() : '';
+        if (payMethod === 'cash') countCash++;
+        else if (payMethod === 'bank') countBank++;
+
         const tr = document.createElement("tr");
         
         let slipButton = "No Slip";
@@ -57,6 +75,18 @@ function handleResponse(data) {
         `;
         tbody.appendChild(tr);
     });
+
+    if(document.getElementById("sumTotalOrders")) document.getElementById("sumTotalOrders").innerText = totalOrders;
+    if(document.getElementById("sizeXS")) document.getElementById("sizeXS").innerText = countXS;
+    if(document.getElementById("sizeS")) document.getElementById("sizeS").innerText = countS;
+    if(document.getElementById("sizeM")) document.getElementById("sizeM").innerText = countM;
+    if(document.getElementById("sizeL")) document.getElementById("sizeL").innerText = countL;
+    if(document.getElementById("sizeXL")) document.getElementById("sizeXL").innerText = countXL;
+    if(document.getElementById("sizeXXL")) document.getElementById("sizeXXL").innerText = countXXL;
+    if(document.getElementById("size3XL")) document.getElementById("size3XL").innerText = count3XL;
+    if(document.getElementById("size4XL")) document.getElementById("size4XL").innerText = count4XL;
+    if(document.getElementById("sumCash")) document.getElementById("sumCash").innerText = countCash;
+    if(document.getElementById("sumBank")) document.getElementById("sumBank").innerText = countBank;
 }
 
 // --- 2. Status Update ---
@@ -104,7 +134,7 @@ async function deleteOrder(admissionNo, button) {
 }
 
 // --- 4. Modal Preview ---
-// --- 4. Modal Preview (Google Drive ලින්ක් එක Direct Link එකක් බවට හරවා පෙන්වීම) ---
+// --- 4. Modal Preview (Google Drive to Direct Link ) ---
 function openSlipModal(url) {
     const modal = document.getElementById("slipModal");
     const modalImg = document.getElementById("modalImage");
@@ -112,42 +142,37 @@ function openSlipModal(url) {
     if (!modal || !modalImg) return;
 
     modal.style.display = "flex";
-    modalImg.src = ""; // පරණ පින්තූරය අයින් කර හිස් කරයි
+    modalImg.src = ""; 
 
-    // 💡 Google Drive ලින්ක් එකෙන් File ID එක වෙන් කරගෙන Direct Link එකක් හදනවා
     if (url.includes("drive.google.com")) {
         const fileId = url.split("/d/")[1].split("/")[0];
         const directLink = `https://lh3.googleusercontent.com/d/${fileId}`;
         modalImg.src = directLink;
     } else {
-        modalImg.src = url; // සාමාන්‍ය ලින්ක් එකක් නම් එහෙම්ම දමයි
+        modalImg.src = url; 
     }
 }
 function closeSlipModal() {
     document.getElementById("slipModal").style.display = "none";
 }
 
-// 💡 පරණ කෝඩ් වලට බාධාවක් නොවන පරිදි අලුතින්ම එකතු කළ Login Function එක
 function checkLogin() {
     const inputPass = document.getElementById("adminPassInput").value;
-    const correctPass = "RajansTech27"; // 💡 ඔයාට කැමති පාස්වර්ඩ් එකක් මෙතනට දෙන්න මචං
+    const correctPass = "RajansTech27"; 
 
     if (inputPass === correctPass) {
-        document.getElementById("loginBox").style.display = "none"; // Login box එක හයිඩ් කරනවා
-        document.getElementById("adminContent").style.display = "block"; // වගුව සහ අනෙක් හැමදේම පෙන්වනවා
+        document.getElementById("loginBox").style.display = "none"; 
+        document.getElementById("adminContent").style.display = "block"; 
         
-        // 💡 පාස්වර්ඩ් එක හරි නම් විතරක් ඔයාගේ පරණ function එක මෙතනදී කෝල් වෙනවා
         fetchOrders(); 
     } else {
         alert("Incorrect Password! Try again.");
     }
 }
 
-// 💡 මුළු පිටුවම රීලෝඩ් නොකර වගුව විතරක් අප්ඩේට් කරන Function එක
 function refreshTableOnly() {
     const refreshBtn = document.getElementById("refreshBtn");
     
-    // බටන් එක ඔබපු ගමන් ඒක "Loading..." වෙනවා
     if (refreshBtn) {
         refreshBtn.disabled = true;
         refreshBtn.innerText = "⏳ Loading Data...";
@@ -155,10 +180,8 @@ function refreshTableOnly() {
         refreshBtn.style.color = "#ffcc00";
     }
 
-    // ඔයාගේ පරණ ලස්සනට වැඩ කරපු fetchOrders එක මෙතනදී රන් වෙනවා
     fetchOrders();
 
-    // ඩේටා ටික ඇවිත් ඉවර වුණාම බටන් එක ආයෙත් සාමාන්‍ය තත්ත්වයට පත් කරන්න (තත්පර 2කින්)
     setTimeout(() => {
         if (refreshBtn) {
             refreshBtn.disabled = false;
