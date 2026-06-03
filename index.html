@@ -91,16 +91,19 @@
             <div class="liquid-card">
                 <h2>Select Your Size</h2>
                 <div class="size-selector">
+                    <div class="size-chip" onclick="selectSize('XS')">XS</div>
                     <div class="size-chip" onclick="selectSize('S')">S</div>
                     <div class="size-chip" onclick="selectSize('M')">M</div>
-                    <div class="size-chip" onclick="selectSize('L')">L</div> <!-- උදාහරණයක් ලෙස L select කර ඇත -->
+                    <div class="size-chip" onclick="selectSize('L')">L</div>
                     <div class="size-chip" onclick="selectSize('XL')">XL</div>
                     <div class="size-chip" onclick="selectSize('XXL')">XXL</div>
-                </div>
-                <!-- සඟවන ලද input එකක් දත්ත ලබා ගැනීමට -->
+                    <div class="size-chip" onclick="selectSize('3XL')">3XL</div>
+                    <div class="size-chip" onclick="selectSize('4XL')">4XL</div>
+        </div>
+                <!-- hidden input -->
                 <input type="hidden" id="finalSize" value="">
     
-                <!-- Step 4 ඇතුළත -->
+                <!-- Step 4 IN -->
                 <button class="liquid-btn" onclick="validateAndNext(4)">Next</button>
             </div>
         </section>
@@ -128,11 +131,11 @@
                     </label>
                 </div>
 
-                <!-- Bank Details (මෙය පෙන්වන්නේ Bank තේරුවොත් විතරයි) -->
+                <!-- Bank Details (This is only shown if select Bank.) -->
                 <div id="bankDetailsArea" style="display: none; margin-top: 20px;">
                     <div class="bank-info">
                         <p><strong>Bank:</strong> Bank of Ceylon (BOC)</p>
-                        <p><strong>Account Name:</strong> [ඔයාගේ නම]</p>
+                        <p><strong>Account Name:</strong> [Acc name]</p>
                         <p><strong>Account Number:</strong> 1234567890</p>
                         <p><strong>Branch:</strong> Kandy</p>
                     </div>
@@ -147,7 +150,7 @@
                     </div>
                 </div>
 
-                <!-- Cash Details (මෙය පෙන්වන්නේ Cash තේරුවොත් විතරයි) -->
+                <!-- Cash Details (This is only shown if Cash is selected.) -->
                 <div id="cashDetailsArea" style="display: none; margin-top: 20px;">
                     <p class="highlight-text">Please handover the cash to the Class Treasurer or [name].</p>
                 </div>
@@ -159,10 +162,11 @@
         </section>
     </div>
 
-    <!-- Alert Box එක මේ විදිහට update කරන්න -->
-    <div id="customAlert" class="alert-overlay">
+    <!-- Alert Box updated -->
+    <!-- 💡 [FIX] - inline style="display: none;" එකක් දැම්මා පේජ් එක ලෝඩ් වෙද්දීම මැද පෑදෙන්නේ නැති වෙන්න -->
+    <div id="customAlert" class="alert-overlay" style="display: none;">
         <div class="alert-box">
-            <div id="alertIcon" class="alert-icon">⚠️</div> <!-- id="alertIcon" එකතු කළා -->
+            <div id="alertIcon" class="alert-icon">⚠️</div>
             <p id="alertMessage">Message goes here</p>
             <button class="liquid-btn small" onclick="closeAlert()">OK</button>
         </div>
@@ -174,9 +178,7 @@
         <img class="modal-content" id="fullImage">
     </div>
 
-    <script>
-
-</script>
+    <!-- 💡 [FIX] - අර මැදින් තිබ්බ අනවශ්‍ය හිස් <script></script> කෑල්ල සහ JS කෝඩ් එක අයින් කරලා මේ ලයින් එක විතරක් ඉතුරු කළා -->
     <script src="js/main.js"></script>
 </body>
 </html>
