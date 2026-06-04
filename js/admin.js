@@ -156,20 +156,32 @@ function closeSlipModal() {
     document.getElementById("slipModal").style.display = "none";
 }
 
-function checkLogin() {
-    const inputPass = document.getElementById("adminPassInput").value;
-    const correctPass = "RajansTech27"; 
+//SHA256
+async function SHA256(string) {
+    const utf8 = new TextEncoder().encode(string);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(bytes => bytes.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
 
-    if (inputPass === correctPass) {
-        document.getElementById("loginBox").style.display = "none"; 
-        document.getElementById("adminContent").style.display = "block"; 
+// Admin login function
+async function checkLogin() {
+    const inputPass = document.getElementById("adminPassInput").value;
+    
+    const encryptedInput = await SHA256(inputPass);
+    
+    const hashedCorrectPass = "b68ee1b8870adf335b8afc8c7cbb1710f9f0593019583115681136a07cbdfa94";
+
+    if (encryptedInput === hashedCorrectPass) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminContent").style.display = "block";
         
-        fetchOrders(); 
+        fetchOrders();
     } else {
         alert("Incorrect Password! Try again.");
     }
 }
-
 function refreshTableOnly() {
     const refreshBtn = document.getElementById("refreshBtn");
     
