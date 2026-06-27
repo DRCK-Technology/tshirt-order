@@ -18,9 +18,22 @@ function handleResponse(data) {
     let totalOrders = 0;
     let countXS = 0, countS = 0, countM = 0, countL = 0, countXL = 0, countXXL = 0, count3XL = 0, count4XL = 0;
     let countCash = 0, countBank = 0;
+    
+    let totalPendingCount = 0;
+    let totalApprovedCount = 0;
+
+    const TSHIRT_PRICE = 2000;
 
     if (data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">No orders found.</td></tr>`;
+        
+        if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = "0";
+        if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = "0";
+        if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = "0";
+        
+        if(document.getElementById("moneyCollected")) document.getElementById("moneyCollected").innerText = "0";
+        if(document.getElementById("moneyPending")) document.getElementById("moneyPending").innerText = "0";
+        if(document.getElementById("moneyTotal")) document.getElementById("moneyTotal").innerText = "0";
         return;
     }
 
@@ -37,10 +50,16 @@ function handleResponse(data) {
         else if (orderSize === '3XL') count3XL++;
         else if (orderSize === '4XL') count4XL++;
 
-        
         const payMethod = order.method ? order.method.toLowerCase().trim() : '';
         if (payMethod === 'cash') countCash++;
         else if (payMethod === 'bank') countBank++;
+
+        const orderStatus = order.status ? order.status.toLowerCase().trim() : '';
+        if (orderStatus === 'done') {
+            totalApprovedCount++;
+        } else {
+            totalPendingCount++; 
+        }
 
         const tr = document.createElement("tr");
         
@@ -76,6 +95,7 @@ function handleResponse(data) {
         tbody.appendChild(tr);
     });
 
+    // 📊 3.Summary Update 
     if(document.getElementById("sumTotalOrders")) document.getElementById("sumTotalOrders").innerText = totalOrders;
     if(document.getElementById("sizeXS")) document.getElementById("sizeXS").innerText = countXS;
     if(document.getElementById("sizeS")) document.getElementById("sizeS").innerText = countS;
@@ -87,6 +107,20 @@ function handleResponse(data) {
     if(document.getElementById("size4XL")) document.getElementById("size4XL").innerText = count4XL;
     if(document.getElementById("sumCash")) document.getElementById("sumCash").innerText = countCash;
     if(document.getElementById("sumBank")) document.getElementById("sumBank").innerText = countBank;
+
+    // 🎯 4. filter button update
+    if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = totalOrders;
+    if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = totalPendingCount;
+    if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = totalApprovedCount;
+
+    // money count
+    const collectedAmt = totalApprovedCount * TSHIRT_PRICE;
+    const pendingAmt = totalPendingCount * TSHIRT_PRICE;
+    const totalExpectedAmt = totalOrders * TSHIRT_PRICE;
+
+    if(document.getElementById("moneyCollected")) document.getElementById("moneyCollected").innerText = collectedAmt.toLocaleString();
+    if(document.getElementById("moneyPending")) document.getElementById("moneyPending").innerText = pendingAmt.toLocaleString();
+    if(document.getElementById("moneyTotal")) document.getElementById("moneyTotal").innerText = totalExpectedAmt.toLocaleString();
 }
 
 // --- 2. Status Update ---
@@ -204,21 +238,19 @@ function refreshTableOnly() {
     }, 2500);
 }
 
-// 1. 🔍 නම හෝ ඇඩ්මිෂන් නම්බර් එක ටයිප් කරද්දීම සර්ච් වෙන ෆන්ක්ෂන් එක
 function filterAdminTable() {
     const input = document.getElementById("adminSearchInput").value.toUpperCase();
     const table = document.querySelector("table"); 
     const tr = table.getElementsByTagName("tr");
 
     for (let i = 1; i < tr.length; i++) {
-        const tdAdmission = tr[i].getElementsByTagName("td")[0]; // 1 වෙනි Column එක = Admission No (Index 0)
-        const tdName = tr[i].getElementsByTagName("td")[1];      // 2 වෙනි Column එක = Student Name (Index 1)
+        const tdAdmission = tr[i].getElementsByTagName("td")[0]; 
+        const tdName = tr[i].getElementsByTagName("td")[1];
         
         if (tdAdmission || tdName) {
             const admissionText = tdAdmission.textContent || tdAdmission.innerText;
             const nameText = tdName.textContent || tdName.innerText;
             
-            // දෙකෙන් එකකට හරි ගැලපෙනවා නම් පේළිය පෙන්වනවා
             if (admissionText.toUpperCase().indexOf(input) > -1 || nameText.toUpperCase().indexOf(input) > -1) {
                 tr[i].style.display = "";
             } else {
@@ -228,16 +260,16 @@ function filterAdminTable() {
     }
 }
 
-// 2. 📊 Pending / Approved filter
+// 2.  Pending / Approved
 function filterStatus(status) {
     const table = document.querySelector("table");
     const tr = table.getElementsByTagName("tr");
 
     for (let i = 1; i < tr.length; i++) {
-        const tdStatus = tr[i].getElementsByTagName("td")[7];
+        const tdStatus = tr[i].getElementsByTagName("td")[7]; 
         
         if (tdStatus) {
-            const statusText = tdStatus.textContent || tdStatus.innerText;
+            const statusText = tdStatus.textContent || tdStatus.innerText; 
             
             if (status === 'all') {
                 tr[i].style.display = "";
