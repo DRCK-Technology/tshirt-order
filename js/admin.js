@@ -234,16 +234,16 @@ function filterStatus(status) {
     const tr = table.getElementsByTagName("tr");
 
     for (let i = 1; i < tr.length; i++) {
-        const tdStatus = tr[i].getElementsByTagName("td")[7]; // 8 වෙනි Column එක = Status (Index 7)
+        const tdStatus = tr[i].getElementsByTagName("td")[7];
         
         if (tdStatus) {
-            const statusText = tdStatus.textContent || tdStatus.innerText; // මේකේ "Done" හෝ "Pending" තියෙන්නේ
+            const statusText = tdStatus.textContent || tdStatus.innerText;
             
             if (status === 'all') {
                 tr[i].style.display = "";
             } else if (status === 'pending' && statusText.trim() === "Pending") {
                 tr[i].style.display = "";
-            } else if (status === 'done' && statusText.trim() === "Done") { // HTML එකේ 'done' නිසා මෙතනත් 'done' කළා
+            } else if (status === 'done' && statusText.trim() === "Done") { 
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
