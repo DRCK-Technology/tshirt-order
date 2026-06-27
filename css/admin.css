@@ -164,7 +164,6 @@ tr:hover {
 .btn-reset:hover { opacity: 0.8; }
 .btn-delete:hover { opacity: 0.8; }
 
-/* 🖥️ සාමාන්‍යයෙන් Screen එකේ (Web Page එකේ) බලද්දී මේ හෙඩර් එක සම්පූර්ණයෙන්ම හංගනවා */
 .print-only-title {
     display: none !important;
 }
