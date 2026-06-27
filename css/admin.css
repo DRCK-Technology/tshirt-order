@@ -164,18 +164,71 @@ tr:hover {
 .btn-reset:hover { opacity: 0.8; }
 .btn-delete:hover { opacity: 0.8; }
 
-/* --- CSS that only works when printing --- */
+/* 🖥️ සාමාන්‍යයෙන් Screen එකේ (Web Page එකේ) බලද්දී මේ හෙඩර් එක සම්පූර්ණයෙන්ම හංගනවා */
+.print-only-title {
+    display: none !important;
+}
+
+/* --- 🖨️ CSS THAT ONLY WORKS WHEN PRINTING --- */
 @media print {
     body {
         background: #ffffff !important;
         color: #000000 !important;
-        font-family: sans-serif;
+        font-family: 'Segoe UI', Arial, sans-serif;
         padding: 0;
-        margin: 10mm; /*(Margins) */
+        margin: 5mm 10mm; 
     }
 
-    h1, h2, p, .admin-desc, .close-btn, #slipModal, #refreshBtn {
+    .print-only-title {
+        display: block !important;
+        text-align: center !important;
+        color: #000000 !important;
+        visibility: visible !important;
+    }
+
+    .print-only-title h1 {
+        display: block !important;
+        font-size: 24px !important;
+        font-weight: bold !important;
+        margin: 0 0 4px 0 !important;
+        color: #000000 !important;
+        letter-spacing: 1px !important;
+    }
+
+    .print-only-title h2 {
+        display: block !important;
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        color: #333333 !important;
+        margin: 0 0 15px 0 !important;
+    }
+
+    .admin-container > h2, 
+    .admin-container > p,
+    .admin-header,
+    .admin-desc, 
+    .close-btn, 
+    #slipModal, 
+    #refreshBtn, 
+    .TC,
+    .summary-wrapper, 
+    .summary-card, 
+    .sizes-grid, 
+    .size-box, 
+    .dashboard-container,
+    #adminSearchInput,
+    .liquid-btn,
+    .admin-container + div {
         display: none !important;
+    }
+
+    .admin-container {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
     }
 
     table {
@@ -189,19 +242,21 @@ tr:hover {
 
     th, td {
         border: 1px solid #333333 !important; 
-        padding: 8px !important;
+        padding: 8px 10px !important;
         color: #000000 !important;
         background: transparent !important;
         font-size: 12px !important;
     }
 
     th {
-        background-color: #f2f2f2 !important;
+        background-color: #f2f2f2 !important; 
         font-weight: bold !important;
+        text-transform: uppercase;
+        font-size: 11px !important;
     }
 
-    table th:nth-child(7), table td:nth-child(7), /* Slip Column */
-    table th:nth-child(9), table td:nth-child(9) { /* Action Buttons Column */
+    table th:nth-child(7), table td:nth-child(7), 
+    table th:nth-child(9), table td:nth-child(9) { 
         display: none !important;
     }
 
@@ -210,12 +265,16 @@ tr:hover {
         color: #000000 !important;
         border: none !important;
         padding: 0 !important;
-        font-weight: bold;
+        font-weight: bold !important;
     }
 
     td span {
         color: #000000 !important;
         font-weight: bold !important;
+    }
+    
+    #downloadPdfBtn {
+        display: none !important;
     }
 }
 
@@ -421,6 +480,9 @@ tr:hover {
 }
 
 @media print {
+    .TC{
+        display: none !important;
+    }
     .summary-wrapper, .summary-card, .sizes-grid, .size-box {
         display: none !important;
     }
