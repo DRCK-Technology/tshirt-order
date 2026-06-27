@@ -203,3 +203,51 @@ function refreshTableOnly() {
         }
     }, 2500);
 }
+
+// 1. 🔍 නම හෝ ඇඩ්මිෂන් නම්බර් එක ටයිප් කරද්දීම සර්ච් වෙන ෆන්ක්ෂන් එක
+function filterAdminTable() {
+    const input = document.getElementById("adminSearchInput").value.toUpperCase();
+    const table = document.querySelector("table"); 
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        const tdAdmission = tr[i].getElementsByTagName("td")[0]; // 1 වෙනි Column එක = Admission No (Index 0)
+        const tdName = tr[i].getElementsByTagName("td")[1];      // 2 වෙනි Column එක = Student Name (Index 1)
+        
+        if (tdAdmission || tdName) {
+            const admissionText = tdAdmission.textContent || tdAdmission.innerText;
+            const nameText = tdName.textContent || tdName.innerText;
+            
+            // දෙකෙන් එකකට හරි ගැලපෙනවා නම් පේළිය පෙන්වනවා
+            if (admissionText.toUpperCase().indexOf(input) > -1 || nameText.toUpperCase().indexOf(input) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+// 2. 📊 Pending / Approved බොත්තම් එබුවහම ෆිල්ටර් වෙන ෆන්ක්ෂන් එක
+function filterStatus(status) {
+    const table = document.querySelector("table");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        const tdStatus = tr[i].getElementsByTagName("td")[7]; // 8 වෙනි Column එක = Status (Index 7)
+        
+        if (tdStatus) {
+            const statusText = tdStatus.textContent || tdStatus.innerText; // මේකේ "Done" හෝ "Pending" තියෙන්නේ
+            
+            if (status === 'all') {
+                tr[i].style.display = "";
+            } else if (status === 'pending' && statusText.trim() === "Pending") {
+                tr[i].style.display = "";
+            } else if (status === 'done' && statusText.trim() === "Done") { // HTML එකේ 'done' නිසා මෙතනත් 'done' කළා
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
