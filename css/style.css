@@ -465,7 +465,7 @@ h2 { margin-bottom: 30px; font-size: 24px; }
     transform: translateY(20px);
     animation: slideUpFade 0.8s ease-out forwards;
     animation: slideUpFade 0.8s ease-out forwards, pulseGlow 1.5s infinite 1.5s;
-    animation-delay: 1.3s; /* තත්පර 1.5කට පස්සේ පටන් ගනී */
+    animation-delay: 1.3s;
 }
 
 @keyframes pulseGlow {
