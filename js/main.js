@@ -46,10 +46,12 @@ function validateAndNext(step) {
     if (step === 2) {
         const name = document.getElementById('name').value;
         const admission = document.getElementById('admissionNo').value;
-        const className = document.getElementById('class').value;
         const phone = document.getElementById('phone').value;
+        
+        // 🎯 [NEW] Radio Button එකක් Select කරලා තියෙනවද බලනවා
+        const selectedClass = document.querySelector('input[name="class"]:checked');
 
-        if (!name || !admission || !className || !phone) {
+        if (!name || !admission || !selectedClass || !phone) {
             showAlert("Please fill in all your details!", "error");
             return;
         }
@@ -88,18 +90,22 @@ function updateFileName() {
     }
 }
 
+// --- 3. Submit Order --- [UPDATED FOR RADIO BUTTONS]
 async function submitOrder() {
     const currentScriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; 
 
     const name = document.getElementById('name').value;
     const admissionNo = document.getElementById('admissionNo').value;
-    const className = document.getElementById('class').value;
     const phone = document.getElementById('phone').value;
     const finalSize = document.getElementById('finalSize').value; 
     const selectedPayment = document.querySelector('input[name="payMethod"]:checked');
+    
+    // 🎯 [NEW] Select කරලා තියෙන Class Radio එකේ Value එක ගන්නවා
+    const selectedClass = document.querySelector('input[name="class"]:checked');
+    const className = selectedClass ? selectedClass.value : '';
 
     // 2. Validation
-    if (!name || !admissionNo || !finalSize || !selectedPayment) {
+    if (!name || !admissionNo || !className || !finalSize || !selectedPayment) {
         showAlert("Please fill all details and select a size!", "error");
         return;
     }
@@ -113,7 +119,7 @@ async function submitOrder() {
     const formData = new FormData();
     formData.append("Name", name);
     formData.append("Admission", admissionNo); 
-    formData.append("Class", className);
+    formData.append("Class", className); // 🎯 කිසිම අවුලක් නැතුව "12-A" / "12-B" / "12-C" විදිහටම Sheet එකට යනවා
     formData.append("Phone", phone);           
     formData.append("Size", finalSize);        
     formData.append("Method", selectedPayment.value);
