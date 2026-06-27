@@ -228,7 +228,7 @@ function filterAdminTable() {
     }
 }
 
-// 2. 📊 Pending / Approved බොත්තම් එබුවහම ෆිල්ටර් වෙන ෆන්ක්ෂන් එක
+// 2. 📊 Pending / Approved filter
 function filterStatus(status) {
     const table = document.querySelector("table");
     const tr = table.getElementsByTagName("tr");
