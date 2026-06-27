@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; 
 
 function selectSize(size) {
     document.querySelectorAll('.size-chip').forEach(chip => {
@@ -44,17 +44,38 @@ function prevStep() {
 // --- 2.  (Validation) ---
 function validateAndNext(step) {
     if (step === 2) {
-        const name = document.getElementById('name').value;
-        const admission = document.getElementById('admissionNo').value;
-        const phone = document.getElementById('phone').value;
+        let nameInput = document.getElementById('name');
+        const admission = document.getElementById('admissionNo').value.trim();
+        const phone = document.getElementById('phone').value.trim();
         
-        // 🎯 [NEW] Radio Button එකක් Select කරලා තියෙනවද බලනවා
         const selectedClass = document.querySelector('input[name="class"]:checked');
 
-        if (!name || !admission || !selectedClass || !phone) {
+        if (!nameInput.value || !admission || !selectedClass || !phone) {
             showAlert("Please fill in all your details!", "error");
             return;
         }
+
+        let rawName = nameInput.value.trim().replace(/\s+/g, ' ').toLowerCase();
+
+        let words = rawName.split(' ');
+
+        if (words.length > 1) {
+            let lastName = words[words.length - 1];
+            lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+
+            let initials = "";
+            for (let i = 0; i < words.length - 1; i++) {
+                let word = words[i].replace(/\./g, ''); 
+                if (word.length > 0) {
+                    initials += word.charAt(0).toUpperCase() + ". ";
+                }
+            }
+
+            nameInput.value = initials + lastName;
+        } else if (words.length === 1 && words[0] !== "") {
+            nameInput.value = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+        }
+
         nextStep(3); 
     } else if (step === 4) {
         const size = document.getElementById('finalSize').value;
@@ -65,7 +86,6 @@ function validateAndNext(step) {
         nextStep(5); 
     }
 }
-
 // --- 3. Payment ---
 function togglePaymentDetails(method) {
     const bankArea = document.getElementById('bankDetailsArea');
@@ -100,7 +120,6 @@ async function submitOrder() {
     const finalSize = document.getElementById('finalSize').value; 
     const selectedPayment = document.querySelector('input[name="payMethod"]:checked');
     
-    // 🎯 [NEW] Select කරලා තියෙන Class Radio එකේ Value එක ගන්නවා
     const selectedClass = document.querySelector('input[name="class"]:checked');
     const className = selectedClass ? selectedClass.value : '';
 
@@ -119,7 +138,7 @@ async function submitOrder() {
     const formData = new FormData();
     formData.append("Name", name);
     formData.append("Admission", admissionNo); 
-    formData.append("Class", className); // 🎯 කිසිම අවුලක් නැතුව "12-A" / "12-B" / "12-C" විදිහටම Sheet එකට යනවා
+    formData.append("Class", className); 
     formData.append("Phone", phone);           
     formData.append("Size", finalSize);        
     formData.append("Method", selectedPayment.value);
@@ -196,14 +215,14 @@ async function sendDataToSheet(formData) {
 // --- 6. Alerts & Previews ---
 // --- 6. Alerts & Previews ---
 function showAlert(message, type) {
-    if (!message) return; // 💡 [FIX] - මැසේජ් එකක් නැත්නම් alert එක display කරන්නේම නැහැ!
+    if (!message) return; 
 
     const alertOverlay = document.getElementById('customAlert');
     const alertIcon = document.getElementById('alertIcon');
     document.getElementById('alertMessage').innerText = message;
     
     alertIcon.innerText = (type === "success") ? "✅" : "⚠️";
-    alertOverlay.style.display = 'flex'; // අවශ්‍ය වෙලාවට විතරක් flex වෙලා පෙනෙන්න ගනීවි
+    alertOverlay.style.display = 'flex'; 
 }
 
 function closeAlert() {
