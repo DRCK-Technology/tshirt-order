@@ -65,17 +65,50 @@
                 </div>
             </div>
 
-            <!-- 🔍 Search, Filter & Refresh Controls Panel -->
+            <div class="money-summary-wrapper" style="max-width: 1200px; margin: 0 auto 25px auto; padding: 0 5px;">
+                <div class="summary-card" style="border-color: rgba(0, 210, 255, 0.2) !important; flex-direction: row; justify-content: space-around; align-items: center; padding: 25px; flex-wrap: wrap; gap: 20px;">
+        
+                    <div style="text-align: center; min-width: 200px;">
+                        <h3 style="color: #00ff88; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Collected Amount (Approved)</h3>
+                        <p style="color: #00ff88; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);">
+                            Rs. <span id="moneyCollected">0</span>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; min-width: 200px; border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); padding: 0 20px;">
+                        <h3 style="color: #f59e0b; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Receivable Amount (Pending)</h3>
+                        <p style="color: #f59e0b; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);">
+                            Rs. <span id="moneyPending">0</span>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; min-width: 200px;">
+                        <h3 style="color: #00d2ff; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Total Expected Revenue</h3>
+                        <p style="color: #00d2ff; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(0, 210, 255, 0.3);">
+                            Rs. <span id="moneyTotal">0</span>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
             <div class="TC" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 20px 0; flex-wrap: wrap; gap: 15px;">
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
                     <input type="text" id="adminSearchInput" onkeyup="filterAdminTable()" placeholder="Search by Name or Admission No..." style="padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; width: 280px; backdrop-filter: blur(5px);">
-                    <button class="liquid-btn small" onclick="filterStatus('all')" style="padding: 10px 15px; font-size: 14px; cursor: pointer; border-radius: 8px; background: white; font-weight: 600; border: none;">All Orders</button>
-                    <button class="liquid-btn small" onclick="filterStatus('pending')" style="padding: 10px 15px; font-size: 14px; background: #ffcc00; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">Pending</button>
-                    <button class="liquid-btn small" onclick="filterStatus('done')" style="padding: 10px 15px; font-size: 14px; background: #00ff88; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">Approved</button>
+        
+                    <button class="liquid-btn small" onclick="filterStatus('all')" style="padding: 10px 15px; font-size: 14px; cursor: pointer; border-radius: 8px; background: white; font-weight: 600; border: none;">
+                        All Orders (<span id="btnCountAll">0</span>)
+                    </button>
+                    <button class="liquid-btn small" onclick="filterStatus('pending')" style="padding: 10px 15px; font-size: 14px; background: #ffcc00; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">
+                        Pending (<span id="btnCountPending">0</span>)
+                    </button>
+                    <button class="liquid-btn small" onclick="filterStatus('done')" style="padding: 10px 15px; font-size: 14px; background: #00ff88; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">
+                        Approved (<span id="btnCountApproved">0</span>)
+                    </button>
                 </div>
-                <button onclick="refreshTableOnly()" id="refreshBtn" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #00ff88; background: transparent; color: #00ff88; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.3s;">
-                    🔄 Refresh Table
-                </button>
+                    <button onclick="refreshTableOnly()" id="refreshBtn" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #00ff88; background: transparent; color: #00ff88; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.3s;">
+                        🔄 Refresh Table
+                    </button>
             </div>
 
             <!-- 📋 Table Section -->
