@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; 
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
 
 function selectSize(size) {
     document.querySelectorAll('.size-chip').forEach(chip => {
@@ -41,7 +41,7 @@ function prevStep() {
     }
 }
 
-// --- 2.  (Validation) ---
+// --- 2.  (Validation) --- [UPDATED FOR AUTOMATIC INITIALS]
 function validateAndNext(step) {
     if (step === 2) {
         let nameInput = document.getElementById('name');
@@ -55,7 +55,9 @@ function validateAndNext(step) {
             return;
         }
 
-        let rawName = nameInput.value.trim().replace(/\s+/g, ' ').toLowerCase();
+        let formattedRaw = nameInput.value.replace(/\./g, '. ');
+
+        let rawName = formattedRaw.trim().replace(/\s+/g, ' ').toLowerCase();
 
         let words = rawName.split(' ');
 
@@ -65,7 +67,7 @@ function validateAndNext(step) {
 
             let initials = "";
             for (let i = 0; i < words.length - 1; i++) {
-                let word = words[i].replace(/\./g, ''); 
+                let word = words[i].replace(/\./g, '');
                 if (word.length > 0) {
                     initials += word.charAt(0).toUpperCase() + ". ";
                 }
@@ -212,7 +214,6 @@ async function sendDataToSheet(formData) {
     }
 }
 
-// --- 6. Alerts & Previews ---
 // --- 6. Alerts & Previews ---
 function showAlert(message, type) {
     if (!message) return; 
