@@ -199,23 +199,31 @@ async function SHA256(string) {
     return hashHex;
 }
 
-// Admin login function
+// Admin login function (Updated with Session Storage)
 async function checkLogin() {
     const inputPass = document.getElementById("adminPassInput").value;
-    
     const encryptedInput = await SHA256(inputPass);
-    
     const hashedCorrectPass = "b68ee1b8870adf335b8afc8c7cbb1710f9f0593019583115681136a07cbdfa94";
 
     if (encryptedInput === hashedCorrectPass) {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("adminContent").style.display = "block";
-        
-        fetchOrders();
+        sessionStorage.setItem("adminLoggedIn", "true");
+        showAdminContent();
     } else {
         alert("Incorrect Password! Try again.");
     }
 }
+
+function showAdminContent() {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminContent").style.display = "block";
+    fetchOrders(); //
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    if (sessionStorage.getItem("adminLoggedIn") === "true") {
+        showAdminContent();
+    }
+});
 function refreshTableOnly() {
     const refreshBtn = document.getElementById("refreshBtn");
     
