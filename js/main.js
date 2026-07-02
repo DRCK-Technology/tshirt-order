@@ -55,6 +55,16 @@ function validateAndNext(step) {
             return;
         }
 
+        if (!/^\d{1,5}$/.test(admission)) {
+            showAlert("Admission Number must contain numbers only and be up to 5 digits long!", "error");
+            return;
+        }
+
+        if (!/^\d+$/.test(phone)) {
+            showAlert("Phone Number must contain numbers only!", "error");
+            return;
+        }
+
         let formattedRaw = nameInput.value.replace(/\./g, '. ');
 
         let rawName = formattedRaw.trim().replace(/\s+/g, ' ').toLowerCase();
