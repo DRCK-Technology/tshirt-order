@@ -168,114 +168,6 @@ tr:hover {
     display: none !important;
 }
 
-/* --- 🖨️ CSS THAT ONLY WORKS WHEN PRINTING --- */
-@media print {
-    body {
-        background: #ffffff !important;
-        color: #000000 !important;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        padding: 0;
-        margin: 5mm 10mm; 
-    }
-
-    .print-only-title {
-        display: block !important;
-        text-align: center !important;
-        color: #000000 !important;
-        visibility: visible !important;
-    }
-
-    .print-only-title h1 {
-        display: block !important;
-        font-size: 24px !important;
-        font-weight: bold !important;
-        margin: 0 0 4px 0 !important;
-        color: #000000 !important;
-        letter-spacing: 1px !important;
-    }
-
-    .print-only-title h2 {
-        display: block !important;
-        font-size: 15px !important;
-        font-weight: 500 !important;
-        color: #333333 !important;
-        margin: 0 0 15px 0 !important;
-    }
-
-    .admin-container > h2, 
-    .admin-container > p,
-    .admin-header,
-    .admin-desc, 
-    .close-btn, 
-    #slipModal, 
-    #refreshBtn, 
-    .TC,
-    .summary-wrapper, 
-    .summary-card, 
-    .sizes-grid, 
-    .size-box, 
-    .dashboard-container,
-    #adminSearchInput,
-    .liquid-btn {
-        display: none !important;
-    }
-
-    .admin-container {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-shadow: none !important;
-        backdrop-filter: none !important;
-    }
-
-    table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        margin-top: 0 !important;
-        box-shadow: none !important;
-    }
-
-    th, td {
-        border: 1px solid #333333 !important; 
-        padding: 8px 10px !important;
-        color: #000000 !important;
-        background: transparent !important;
-        font-size: 12px !important;
-    }
-
-    th {
-        background-color: #f2f2f2 !important; 
-        font-weight: bold !important;
-        text-transform: uppercase;
-        font-size: 11px !important;
-    }
-
-    table th:nth-child(7), table td:nth-child(7), 
-    table th:nth-child(9), table td:nth-child(9) { 
-        display: none !important;
-    }
-
-    .badge {
-        background: transparent !important;
-        color: #000000 !important;
-        border: none !important;
-        padding: 0 !important;
-        font-weight: bold !important;
-    }
-
-    td span {
-        color: #000000 !important;
-        font-weight: bold !important;
-    }
-    
-    #downloadPdfBtn {
-        display: none !important;
-    }
-}
-
 #refreshBtn:hover {
     background: #00ff88 !important;
     color: #000000 !important;
@@ -293,7 +185,6 @@ tr:hover {
     flex-wrap: wrap;
     font-family: sans-serif;
     border-radius: 10px;
-
     position: sticky;
     top: 0;                
     z-index: 100;          
@@ -351,14 +242,10 @@ tr:hover {
     max-width: 1200px;
     margin: 20px auto 30px auto;
     padding: 0 5px;
-    
-    /*(Sticky Effect) */
     position: sticky;
     top: 0;
     z-index: 100;
-    /* background: #0f172a !important; */
     padding-bottom: 15px;
-    /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
 }
 
 @media (max-width: 992px) {
@@ -453,7 +340,6 @@ tr:hover {
     margin-top: 2px;
 }
 
-/* 5. Payment Methods */
 .pay-info-row {
     display: flex;
     justify-content: space-between;
@@ -481,26 +367,120 @@ tr:hover {
     display: none !important;
 }
 
+
+/* ==========================================================================
+   🖨️ PERFECT PRINT CONFIGURATION (SEPARATE PAGES FIX)
+   ========================================================================== */
 @media print {
-    .TC{
-        display: none !important;
-    }
-    .summary-wrapper, .summary-card, .sizes-grid, .size-box {
-        display: none !important;
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 0;
+        margin: 5mm 10mm;
     }
 
+    .admin-container {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        display: block !important;
+    }
+
+    .print-only-title {
+        display: block !important;
+        text-align: center !important;
+        color: #000000 !important;
+        visibility: visible !important;
+        margin-bottom: 15px !important;
+    }
+
+    .print-only-title h1 {
+        display: block !important;
+        font-size: 24px !important;
+        font-weight: bold !important;
+        margin: 0 0 4px 0 !important;
+    }
+
+    .print-only-title h2 {
+        display: block !important;
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        color: #333333 !important;
+    }
+
+    .table-responsive {
+        width: 100% !important;
+        display: block !important;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin-top: 10px !important;
+    }
+
+    th, td {
+        border: 1px solid #333333 !important; 
+        padding: 8px 10px !important;
+        color: #000000 !important;
+        font-size: 12px !important;
+    }
+
+    th {
+        background-color: #f2f2f2 !important; 
+        font-weight: bold !important;
+        text-transform: uppercase;
+    }
+
+    table td:nth-child(5) span {
+        color: #000000 !important;
+    }
+
+    table th:nth-child(7), table td:nth-child(7), 
+    table th:nth-child(9), table td:nth-child(9) { 
+        display: none !important;
+    }
 
     .print-only-size-chart {
         display: block !important;
         visibility: visible !important;
-        page-break-before: always !important; /* මේකෙන් තමයි වෙනම පිටුවකට ගන්නේ */
         margin-top: 50px !important;
+        page-break-before: always !important; 
     }
 
-    .print-only-size-chart table {
-        width: 100% !important;
-        background: #ffffff !important;
+    .print-only-size-chart table th {
+        background-color: #eaeaea !important;
         color: #000000 !important;
     }
 
+    .print-only-size-chart td {
+        font-size: 14px !important;
+        text-align: center !important;
+    }
+
+    .summary-wrapper,
+    .money-summary-wrapper,
+    .admin-container > h2, 
+    .admin-container > p,
+    .admin-header,
+    .admin-desc, 
+    .close-btn, 
+    #slipModal, 
+    #refreshBtn, 
+    .TC,
+    #downloadPdfBtn {
+        display: none !important;
+    }
+
+    .badge {
+        background: transparent !important;
+        color: #000000 !important;
+        font-weight: bold !important;
+    }
 }
