@@ -284,3 +284,21 @@ function checkDuplicateAndSubmit(admissionNo, formData, submitBtn) {
     script.src = `${scriptURL}?action=read&callback=handleDuplicateCheck`;
     document.body.appendChild(script);
 }
+
+// ⏰ IMMEDIATELY CLOSE ORDERS AND KEEP ADMIN ALIVE
+window.addEventListener("DOMContentLoaded", () => {
+    const activeStep = document.querySelector('.step.active');
+    if (activeStep) {
+        activeStep.classList.remove('active');
+        activeStep.style.display = 'none';
+    }
+
+    document.querySelectorAll('.step').forEach(s => {
+        s.remove(); 
+    });
+
+    const closedMsg = document.getElementById("closedMessage");
+    if (closedMsg) {
+        closedMsg.style.display = "block";
+    }
+});
