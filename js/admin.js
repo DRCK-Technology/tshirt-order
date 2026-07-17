@@ -95,8 +95,7 @@ function handleResponse(data) {
         tbody.appendChild(tr);
     });
 
-    // 📊 3.Summary Update 
-    if(document.getElementById("sumTotalOrders")) document.getElementById("sumTotalOrders").innerText = totalOrders;
+    // 📊 [FIXED] 1. ඇඩ්මින් පේජ් එකේ උඩ තියෙන සයිස් කාඩ්ස් ලයිව් අප්ඩේට් කරනවා
     if(document.getElementById("sizeXS")) document.getElementById("sizeXS").innerText = countXS;
     if(document.getElementById("sizeS")) document.getElementById("sizeS").innerText = countS;
     if(document.getElementById("sizeM")) document.getElementById("sizeM").innerText = countM;
@@ -105,15 +104,28 @@ function handleResponse(data) {
     if(document.getElementById("sizeXXL")) document.getElementById("sizeXXL").innerText = countXXL;
     if(document.getElementById("size3XL")) document.getElementById("size3XL").innerText = count3XL;
     if(document.getElementById("size4XL")) document.getElementById("size4XL").innerText = count4XL;
+
+    // 🖨️ 2. ප්‍රින්ට් වෙන ටේබල් එකටත් සයිස් ගණන් ටික එකපාර යවනවා
+    if(document.getElementById("printXS")) document.getElementById("printXS").innerText = countXS;
+    if(document.getElementById("printS")) document.getElementById("printS").innerText = countS;
+    if(document.getElementById("printM")) document.getElementById("printM").innerText = countM;
+    if(document.getElementById("printL")) document.getElementById("printL").innerText = countL;
+    if(document.getElementById("printXL")) document.getElementById("printXL").innerText = countXL;
+    if(document.getElementById("printXXL")) document.getElementById("printXXL").innerText = countXXL;
+    if(document.getElementById("print3XL")) document.getElementById("print3XL").innerText = count3XL;
+    if(document.getElementById("print4XL")) document.getElementById("print4XL").innerText = count4XL;
+
+    // 💸 3. මුදල් සහ ක්‍රමවේද අප්ඩේට් කිරීම්
+    if(document.getElementById("sumTotalOrders")) document.getElementById("sumTotalOrders").innerText = totalOrders;
     if(document.getElementById("sumCash")) document.getElementById("sumCash").innerText = countCash;
     if(document.getElementById("sumBank")) document.getElementById("sumBank").innerText = countBank;
 
-    // 🎯 4. filter button update
+    // 🎯 4. ෆිල්ටර් බටන්ස් වල කවුන්ට් එක
     if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = totalOrders;
     if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = totalPendingCount;
     if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = totalApprovedCount;
 
-    // money count
+    // මුළු මුදල් ගණනය කිරීම්
     const collectedAmt = totalApprovedCount * TSHIRT_PRICE;
     const pendingAmt = totalPendingCount * TSHIRT_PRICE;
     const totalExpectedAmt = totalOrders * TSHIRT_PRICE;
@@ -123,7 +135,7 @@ function handleResponse(data) {
     if(document.getElementById("moneyTotal")) document.getElementById("moneyTotal").innerText = totalExpectedAmt.toLocaleString();
 }
 
-// --- 2. Status Update ---
+// --- Status Update ---
 async function updateStatus(admissionNo, newStatus, button) {
     const actionText = newStatus === 'Done' ? 'approve' : 'reset to pending';
     if (!confirm(`Are you sure you want to ${actionText} this order?`)) return;
@@ -146,7 +158,7 @@ async function updateStatus(admissionNo, newStatus, button) {
     }
 }
 
-// --- 3. Delete Order ---
+// --- Delete Order ---
 async function deleteOrder(admissionNo, button) {
     if (!confirm("⚠️ Permanent Delete?")) return;
 
@@ -167,8 +179,7 @@ async function deleteOrder(admissionNo, button) {
     }
 }
 
-// --- 4. Modal Preview ---
-// --- 4. Modal Preview (Google Drive to Direct Link ) ---
+// --- Modal Preview ---
 function openSlipModal(url) {
     const modal = document.getElementById("slipModal");
     const modalImg = document.getElementById("modalImage");
@@ -190,7 +201,7 @@ function closeSlipModal() {
     document.getElementById("slipModal").style.display = "none";
 }
 
-//SHA256
+// SHA256 Encryption
 async function SHA256(string) {
     const utf8 = new TextEncoder().encode(string);
     const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
@@ -199,7 +210,7 @@ async function SHA256(string) {
     return hashHex;
 }
 
-// Admin login function (Updated with Session Storage)
+// Admin login function
 async function checkLogin() {
     const inputPass = document.getElementById("adminPassInput").value;
     const encryptedInput = await SHA256(inputPass);
@@ -216,7 +227,7 @@ async function checkLogin() {
 function showAdminContent() {
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("adminContent").style.display = "block";
-    fetchOrders(); //
+    fetchOrders(); 
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -224,6 +235,7 @@ window.addEventListener("DOMContentLoaded", () => {
         showAdminContent();
     }
 });
+
 function refreshTableOnly() {
     const refreshBtn = document.getElementById("refreshBtn");
     
@@ -268,7 +280,6 @@ function filterAdminTable() {
     }
 }
 
-// 2.  Pending / Approved
 function filterStatus(status) {
     const table = document.querySelector("table");
     const tr = table.getElementsByTagName("tr");
