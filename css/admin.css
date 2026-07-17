@@ -216,8 +216,7 @@ tr:hover {
     .size-box, 
     .dashboard-container,
     #adminSearchInput,
-    .liquid-btn,
-    .admin-container + div {
+    .liquid-btn {
         display: none !important;
     }
 
@@ -342,7 +341,7 @@ tr:hover {
 }
 
 /* ==========================================================================
-   🎯 SUMMARY DASHBOARD STYLING (LIQUID GLASS THEME)
+   SUMMARY DASHBOARD STYLING (LIQUID GLASS THEME)
    ========================================================================== */
 
 .summary-wrapper {
@@ -478,6 +477,10 @@ tr:hover {
     text-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
 }
 
+.print-only-size-chart {
+    display: none !important;
+}
+
 @media print {
     .TC{
         display: none !important;
@@ -485,4 +488,19 @@ tr:hover {
     .summary-wrapper, .summary-card, .sizes-grid, .size-box {
         display: none !important;
     }
+
+
+    .print-only-size-chart {
+        display: block !important;
+        visibility: visible !important;
+        page-break-before: always !important; /* මේකෙන් තමයි වෙනම පිටුවකට ගන්නේ */
+        margin-top: 50px !important;
+    }
+
+    .print-only-size-chart table {
+        width: 100% !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+
 }
