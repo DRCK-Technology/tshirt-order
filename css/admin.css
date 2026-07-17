@@ -442,10 +442,20 @@ tr:hover {
         color: #000000 !important;
     }
 
-    table th:nth-child(7), table td:nth-child(7), 
-    table th:nth-child(9), table td:nth-child(9) { 
-        display: none !important;
-    }
+    /* 🎯 @media print ඇතුළේ තියෙන පරණ nth-child කෝඩ් එක අයින් කරලා මේක විතරක් දාන්න: */
+#adminTableBody tr td:nth-child(7), 
+.admin-container table thead tr th:nth-child(7),
+#adminTableBody tr td:nth-child(9), 
+.admin-container table thead tr th:nth-child(9) { 
+    display: none !important;
+}
+
+/* සයිස් චාර්ට් එකේ කිසිම දෙයක් හැංගෙන්න නොදී හැමතිස්සෙම Force කරලා පෙන්වන්න */
+.print-only-size-chart table,
+.print-only-size-chart th, 
+.print-only-size-chart td {
+    display: table-cell !important;
+}
 
     .print-only-size-chart {
         display: block !important;
