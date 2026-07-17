@@ -285,20 +285,31 @@ function checkDuplicateAndSubmit(admissionNo, formData, submitBtn) {
     document.body.appendChild(script);
 }
 
-// ⏰ IMMEDIATELY CLOSE ORDERS AND KEEP ADMIN ALIVE
+// ========================================================
+// ⏰ AUTOMATIC DEADLINE CONTROL SYSTEM
+// ========================================================
+
+const targetDate = new Date("2026-07-18T00:05:00"); 
+
 window.addEventListener("DOMContentLoaded", () => {
-    const activeStep = document.querySelector('.step.active');
-    if (activeStep) {
-        activeStep.classList.remove('active');
-        activeStep.style.display = 'none';
-    }
+    const currentDate = new Date();
 
-    document.querySelectorAll('.step').forEach(s => {
-        s.remove(); 
-    });
+    if (currentDate >= targetDate) {
+        const activeStep = document.querySelector('.step.active');
+        if (activeStep) {
+            activeStep.classList.remove('active');
+            activeStep.style.display = 'none';
+        }
 
-    const closedMsg = document.getElementById("closedMessage");
-    if (closedMsg) {
-        closedMsg.style.display = "block";
+        document.querySelectorAll('.step').forEach(s => {
+            s.remove(); 
+        });
+
+        const closedMsg = document.getElementById("closedMessage");
+        if (closedMsg) {
+            closedMsg.style.display = "block";
+        }
+    } else {
+        nextStep(1);
     }
 });
