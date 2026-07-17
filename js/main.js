@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; // මතක ඇතුව අලුත් Deployment URL එක මෙතනට දාන්න
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec'; 
 
 function selectSize(size) {
     document.querySelectorAll('.size-chip').forEach(chip => {
@@ -289,7 +289,7 @@ function checkDuplicateAndSubmit(admissionNo, formData, submitBtn) {
 // ⏰ AUTOMATIC DEADLINE CONTROL SYSTEM
 // ========================================================
 
-const targetDate = new Date("2026-07-18T00:30:00"); 
+const targetDate = new Date("2026-07-18T00:16:00"); 
 
 window.addEventListener("DOMContentLoaded", () => {
     const currentDate = new Date();
