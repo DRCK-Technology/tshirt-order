@@ -15,6 +15,13 @@
     </div>
 
     <div class="container">
+        <!-- 🚨 Orders Closed Message Start -->
+        <div id="closedMessage" style="display: none; max-width: 450px; margin: 40px auto; padding: 40px 30px; background: rgba(255, 0, 85, 0.05); backdrop-filter: blur(30px) saturate(200%); border-radius: 30px; border: 1px solid rgba(255, 0, 85, 0.3); text-align: center; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);">
+            <div style="font-size: 50px; margin-bottom: 20px;">🛑</div>
+            <h2 style="color: #ff0055; margin-bottom: 15px; font-size: 24px;">Orders Are Closed!</h2>
+            <p style="color: rgba(255, 255, 255, 0.8); font-size: 15px; line-height: 1.6; font-family: sans-serif;">Official '27 Batch T-Shirt ordering period has ended. If you have any urgent issues, please contact following us <br> Indumina: 0760684908 <br> Muditha: 0778509449 <br> Warana: 0772377589</p>
+        </div>
+        <!-- 🚨 Orders Closed Message End -->
         <!-- Step 1: Design Preview -->
         <section class="step active" id="step1">
             <div class="glass-nav">
@@ -88,7 +95,7 @@
                 <p class="warning-text">⚠️ Please remember your size.</p>
                 <div class="size-chart-container">
                     <!--Size chart image -->
-                    <img src="img/size.png" onclick="openPreview(this.src)" style="cursor: pointer;" alt="Size Chart" class="chart-img">
+                    <img src="img/size chart W.png" onclick="openPreview(this.src)" style="cursor: pointer;" alt="Size Chart" class="chart-img">
                 </div>
                 <button class="liquid-btn" onclick="nextStep(4)">I Remember, OK</button>
             </div>
@@ -150,10 +157,10 @@
                 <!-- Bank Details (This is only shown if select Bank.) -->
                 <div id="bankDetailsArea" style="display: none; margin-top: 20px;">
                     <div class="bank-info">
-                        <p><strong>Bank:</strong> People's Bank</p>
-                        <p><strong>Account Name:</strong> D.H.M.T.K.Karunarathna</p>
-                        <p><strong>Account Number:</strong> 138-2-001-2-5453801</p>
-                        <p><strong>Branch:</strong> Dambulla</p>
+                        <p><strong>Bank:</strong> Bank of Ceylon (BOC)</p>
+                        <p><strong>Account Name:</strong> [Acc name]</p>
+                        <p><strong>Account Number:</strong> 1234567890</p>
+                        <p><strong>Branch:</strong> Kandy</p>
                     </div>
                     <div class="form-group" style="margin-top: 15px;">
                         <div class="file-upload-wrapper" style="margin-top: 15px;">
@@ -178,6 +185,8 @@
         </section>
     </div>
 
+    <!-- Alert Box updated -->
+    <!-- 💡 [FIX] - inline style="display: none;" එකක් දැම්මා පේජ් එක ලෝඩ් වෙද්දීම මැද පෑදෙන්නේ නැති වෙන්න -->
     <div id="customAlert" class="alert-overlay" style="display: none;">
         <div class="alert-box">
             <div id="alertIcon" class="alert-icon">⚠️</div>
