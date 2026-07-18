@@ -289,7 +289,7 @@ function checkDuplicateAndSubmit(admissionNo, formData, submitBtn) {
 // ⏰ AUTOMATIC DEADLINE CONTROL SYSTEM
 // ========================================================
 
-const targetDate = new Date("2026-07-18T01:20:00"); 
+const targetDate = new Date("2026-07-18T01:30:00"); 
 
 window.addEventListener("DOMContentLoaded", () => {
     const currentDate = new Date();
