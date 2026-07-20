@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Batch - Admin Panel</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/Analytics.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <!-- 🔐 1. LOGIN BOX -->
+    <div id="loginBox" style="max-width: 400px; margin: 100px auto; padding: 30px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); text-align: center; font-family: sans-serif;">
+        <h2 style="color: #fff; margin-bottom: 20px;">Admin Login</h2>
+        <input type="password" id="adminPassInput" placeholder="Enter Password" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; background: rgba(255,255,255,0.2); color: #fff; text-align: center; font-size: 16px; box-sizing: border-box;">
+        <button onclick="checkLogin()" style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: #00ff88; color: #000; font-weight: bold; cursor: pointer; font-size: 16px;">Login</button>
+    </div>
+
+    <!-- 📊 2. ADMIN CONTENT -->
+    <div id="adminContent" style="display: none;">
+
+        <div class="print-only-title">
+                <center><h1>DHARMARAJA COLLEGE - KANDY</h1>
+                <h2>Technology Section - Official '27 Batch T-Shirt Orders List</h2></center>
+                <hr style="border: 1px solid #000; margin-top: 10px;">
+        </div>
+
+        <div class="admin-container">
+            <div class="admin-header">
+                <!-- 🌐 NAV BUTTONS FOR SWITCHING PAGES -->
+                <div class="page-nav-wrapper">
+                    <a href="#" class="nav-btn active">📋 Orders List</a>
+                    <a href="Analytics.html" class="nav-btn">📊 Live Analytics</a>
+                </div>
+                <h2>Tech Batch - T-Shirt Orders Admin</h2>
+                <p>Manage student orders, view payment slips, and approve status live.</p>
+            
+                <!-- 📈 Summary Cards Wrapper -->
+                <div class="summary-wrapper">
+                    <div class="summary-card total-card">
+                        <h3>Total Orders</h3>
+                        <div class="count-value" id="sumTotalOrders">0</div>
+                    </div>
+
+                    <div class="summary-card sizes-card">
+                        <h3>Size Requirements Count</h3>
+                        <div class="sizes-grid">
+                            <div class="size-box"><span>XS</span><strong id="sizeXS">0</strong></div>
+                            <div class="size-box"><span>S</span><strong id="sizeS">0</strong></div>
+                            <div class="size-box"><span>M</span><strong id="sizeM">0</strong></div>
+                            <div class="size-box"><span>L</span><strong id="sizeL">0</strong></div>
+                            <div class="size-box"><span>XL</span><strong id="sizeXL">0</strong></div>
+                            <div class="size-box"><span>XXL</span><strong id="sizeXXL">0</strong></div>
+                            <div class="size-box"><span>3XL</span><strong id="size3XL">0</strong></div>
+                            <div class="size-box"><span>4XL</span><strong id="size4XL">0</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="summary-card payment-card">
+                        <h3>Payment Methods</h3>
+                        <div class="pay-info-row">
+                            <span>💸 Cash Transfer:</span>
+                            <strong id="sumCash">0</strong>
+                        </div>
+                        <div class="pay-info-row">
+                            <span>🏦 Bank / Slip:</span>
+                            <strong id="sumBank">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="money-summary-wrapper" style="max-width: 1200px; margin: 0 auto 25px auto; padding: 0 5px;">
+                <div class="summary-card" style="border-color: rgba(0, 210, 255, 0.2) !important; flex-direction: row; justify-content: space-around; align-items: center; padding: 25px; flex-wrap: wrap; gap: 20px;">
+        
+                    <div style="text-align: center; min-width: 200px;">
+                        <h3 style="color: #00ff88; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Collected Amount (Approved)</h3>
+                        <p style="color: #00ff88; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);">
+                            Rs. <span id="moneyCollected">0</span>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; min-width: 200px; border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); padding: 0 20px;">
+                        <h3 style="color: #f59e0b; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Receivable Amount (Pending)</h3>
+                        <p style="color: #f59e0b; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);">
+                            Rs. <span id="moneyPending">0</span>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; min-width: 200px;">
+                        <h3 style="color: #00d2ff; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Total Expected Revenue</h3>
+                        <p style="color: #00d2ff; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(0, 210, 255, 0.3);">
+                            Rs. <span id="moneyTotal">0</span>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="TC" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 20px 0; flex-wrap: wrap; gap: 15px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <input type="text" id="adminSearchInput" onkeyup="filterAdminTable()" placeholder="Search by Name or Admission No..." style="padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; width: 280px; backdrop-filter: blur(5px);">
+        
+                    <button class="liquid-btn small" onclick="filterStatus('all')" style="padding: 10px 15px; font-size: 14px; cursor: pointer; border-radius: 8px; background: white; font-weight: 600; border: none;">
+                        All Orders (<span id="btnCountAll">0</span>)
+                    </button>
+                    <button class="liquid-btn small" onclick="filterStatus('pending')" style="padding: 10px 15px; font-size: 14px; background: #ffcc00; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">
+                        Pending (<span id="btnCountPending">0</span>)
+                    </button>
+                    <button class="liquid-btn small" onclick="filterStatus('done')" style="padding: 10px 15px; font-size: 14px; background: #00ff88; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">
+                        Approved (<span id="btnCountApproved">0</span>)
+                    </button>
+                </div>
+                    <button onclick="refreshTableOnly()" id="refreshBtn" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #00ff88; background: transparent; color: #00ff88; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.3s;">
+                        🔄 Refresh Table
+                    </button>
+            </div>
+
+            <!-- 📋 Table Section -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Admission</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Phone</th>
+                            <th>Size</th>
+                            <th>Method</th>
+                            <th>Slip</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody">
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 20px;">Loading orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 👕 PRINTING SIZE CHART WITH REAL-TIME COUNTS (CHEST ROW REMOVED) -->
+        <div class="print-only-size-chart">
+            <center>
+                <h1 style="font-size: 22px; margin-bottom: 5px;">DHARMARAJA COLLEGE - KANDY</h1>
+                <h2 style="font-size: 16px; margin-bottom: 20px; color: #555;">Official '27 Batch T-Shirt - Size Guide & Summary</h2>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background-color: #f2f2f2 !important;">
+                            <th style="border: 1px solid #333 !important; padding: 10px;">Size</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">XS</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">S</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">M</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">L</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">XL</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">XXL</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">3XL</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">4XL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-weight: bold; background-color: #f9f9f9;">
+                            <td style="border: 1px solid #333 !important; padding: 10px; color: #000; text-align: left; font-weight: bold;">Required Qty</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printXS">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printS">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printM">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printXL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printXXL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="print3XL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="print4XL">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+        </div>
+
+        <!-- 🖼️ Slip Modal -->
+        <div id="slipModal" class="modal">
+            <span class="close-modal" onclick="closeSlipModal()">&times;</span>
+            <img class="modal-content" id="modalImage">
+        </div>
+
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
