@@ -1,319 +1,192 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Batch - Admin Panel</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/Analytics.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
 
+    <!-- 🔐 1. LOGIN BOX -->
+    <div id="loginBox" style="max-width: 400px; margin: 100px auto; padding: 30px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); text-align: center; font-family: sans-serif;">
+        <h2 style="color: #fff; margin-bottom: 20px;">Admin Login</h2>
+        <input type="password" id="adminPassInput" placeholder="Enter Password" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; background: rgba(255,255,255,0.2); color: #fff; text-align: center; font-size: 16px; box-sizing: border-box;">
+        <button onclick="checkLogin()" style="width: 100%; padding: 12px; border-radius: 8px; border: none; background: #00ff88; color: #000; font-weight: bold; cursor: pointer; font-size: 16px;">Login</button>
+    </div>
 
-function fetchOrders() {
-    const tbody = document.getElementById("adminTableBody");
-    tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px;">Loading orders...</td></tr>`;
+    <!-- 📊 2. ADMIN CONTENT -->
+    <div id="adminContent" style="display: none;">
 
-    const script = document.createElement('script');
-    script.src = `${scriptURL}?action=read&callback=handleResponse`;
-    document.body.appendChild(script);
-    document.body.removeChild(script); 
-}
+        <div class="print-only-title">
+                <center><h1>DHARMARAJA COLLEGE - KANDY</h1>
+                <h2>Technology Section - Official '27 Batch T-Shirt Orders List</h2></center>
+                <hr style="border: 1px solid #000; margin-top: 10px;">
+        </div>
 
-function handleResponse(data) {
-    const tbody = document.getElementById("adminTableBody");
-    tbody.innerHTML = "";
-
-    // Cutoff time
-    const cutoffTime = new Date("2026-07-20T19:00:00"); 
-
-    data = data.filter(order => {
-        const rawTime = order.Timestamp || order.timestamp || order.Date || order.date;
-        
-        if (!rawTime) return false;
-        
-        const orderTime = new Date(rawTime);
-        
-        if (isNaN(orderTime.getTime())) return false;
-
-        return orderTime > cutoffTime;
-    });
-
-    let totalOrders = 0;
-    let countXS = 0, countS = 0, countM = 0, countL = 0, countXL = 0, countXXL = 0, count3XL = 0, count4XL = 0;
-    let countCash = 0, countBank = 0;
-    
-    let totalPendingCount = 0;
-    let totalApprovedCount = 0;
-
-    const TSHIRT_PRICE = 2000;
-
-    if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">No orders found.</td></tr>`;
-        
-        if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = "0";
-        if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = "0";
-        if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = "0";
-        
-        if(document.getElementById("moneyCollected")) document.getElementById("moneyCollected").innerText = "0";
-        if(document.getElementById("moneyPending")) document.getElementById("moneyPending").innerText = "0";
-        if(document.getElementById("moneyTotal")) document.getElementById("moneyTotal").innerText = "0";
-        return;
-    }
-
-    data.forEach(order => {
-        totalOrders++; 
-
-        const orderSize = order.size ? order.size.toUpperCase().trim() : '';
-        if (orderSize === 'XS') countXS++;
-        else if (orderSize === 'S') countS++;
-        else if (orderSize === 'M') countM++;
-        else if (orderSize === 'L') countL++;
-        else if (orderSize === 'XL') countXL++;
-        else if (orderSize === 'XXL') countXXL++;
-        else if (orderSize === '3XL') count3XL++;
-        else if (orderSize === '4XL') count4XL++;
-
-        const payMethod = order.method ? order.method.toLowerCase().trim() : '';
-        if (payMethod === 'cash') countCash++;
-        else if (payMethod === 'bank') countBank++;
-
-        const orderStatus = order.status ? order.status.toLowerCase().trim() : '';
-        if (orderStatus === 'done') {
-            totalApprovedCount++;
-        } else {
-            totalPendingCount++; 
-        }
-
-        const tr = document.createElement("tr");
-        
-        let slipButton = "No Slip";
-        if (order.slipUrl && order.slipUrl !== "No Slip") {
-            slipButton = `<button class="btn-view" onclick="openSlipModal('${order.slipUrl}')">View Slip</button>`;
-        }
-
-        let actionButtons = "";
-        if (order.status.toLowerCase() === "done") {
-            actionButtons = `
-                <button class="btn-reset" onclick="updateStatus('${order.admission}', 'Pending', this)">Reset</button>
-                <button class="btn-delete" onclick="deleteOrder('${order.admission}', this)">Delete</button>
-            `;
-        } else {
-            actionButtons = `
-                <button class="btn-approve" onclick="updateStatus('${order.admission}', 'Done', this)">Approve</button>
-                <button class="btn-delete" onclick="deleteOrder('${order.admission}', this)">Delete</button>
-            `;
-        }
-
-        tr.innerHTML = `
-            <td>${order.admission}</td>
-            <td>${order.name}</td>
-            <td>${order.class}</td>
-            <td>${order.phone}</td>
-            <td><span style="color:#00ff88; font-weight:bold;">${order.size}</span></td>
-            <td>${order.method.toUpperCase()}</td>
-            <td>${slipButton}</td>
-            <td><span class="badge ${order.status.toLowerCase()}">${order.status}</span></td>
-            <td><div class="action-group">${actionButtons}</div></td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    // 📊 [FIXED] 1. ඇඩ්මින් පේජ් එකේ උඩ තියෙන සයිස් කාඩ්ස් ලයිව් අප්ඩේට් කරනවා
-    if(document.getElementById("sizeXS")) document.getElementById("sizeXS").innerText = countXS;
-    if(document.getElementById("sizeS")) document.getElementById("sizeS").innerText = countS;
-    if(document.getElementById("sizeM")) document.getElementById("sizeM").innerText = countM;
-    if(document.getElementById("sizeL")) document.getElementById("sizeL").innerText = countL;
-    if(document.getElementById("sizeXL")) document.getElementById("sizeXL").innerText = countXL;
-    if(document.getElementById("sizeXXL")) document.getElementById("sizeXXL").innerText = countXXL;
-    if(document.getElementById("size3XL")) document.getElementById("size3XL").innerText = count3XL;
-    if(document.getElementById("size4XL")) document.getElementById("size4XL").innerText = count4XL;
-
-    // 🖨️ 2. ප්‍රින්ට් වෙන ටේබල් එකටත් සයිස් ගණන් ටික එකපාර යවනවා
-    if(document.getElementById("printXS")) document.getElementById("printXS").innerText = countXS;
-    if(document.getElementById("printS")) document.getElementById("printS").innerText = countS;
-    if(document.getElementById("printM")) document.getElementById("printM").innerText = countM;
-    if(document.getElementById("printL")) document.getElementById("printL").innerText = countL;
-    if(document.getElementById("printXL")) document.getElementById("printXL").innerText = countXL;
-    if(document.getElementById("printXXL")) document.getElementById("printXXL").innerText = countXXL;
-    if(document.getElementById("print3XL")) document.getElementById("print3XL").innerText = count3XL;
-    if(document.getElementById("print4XL")) document.getElementById("print4XL").innerText = count4XL;
-
-    // 💸 3. මුදල් සහ ක්‍රමවේද අප්ඩේට් කිරීම්
-    if(document.getElementById("sumTotalOrders")) document.getElementById("sumTotalOrders").innerText = totalOrders;
-    if(document.getElementById("sumCash")) document.getElementById("sumCash").innerText = countCash;
-    if(document.getElementById("sumBank")) document.getElementById("sumBank").innerText = countBank;
-
-    // 🎯 4. ෆිල්ටර් බටන්ස් වල කවුන්ට් එක
-    if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = totalOrders;
-    if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = totalPendingCount;
-    if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = totalApprovedCount;
-
-    // මුළු මුදල් ගණනය කිරීම්
-    const collectedAmt = totalApprovedCount * TSHIRT_PRICE;
-    const pendingAmt = totalPendingCount * TSHIRT_PRICE;
-    const totalExpectedAmt = totalOrders * TSHIRT_PRICE;
-
-    if(document.getElementById("moneyCollected")) document.getElementById("moneyCollected").innerText = collectedAmt.toLocaleString();
-    if(document.getElementById("moneyPending")) document.getElementById("moneyPending").innerText = pendingAmt.toLocaleString();
-    if(document.getElementById("moneyTotal")) document.getElementById("moneyTotal").innerText = totalExpectedAmt.toLocaleString();
-}
-
-// --- Status Update ---
-async function updateStatus(admissionNo, newStatus, button) {
-    const actionText = newStatus === 'Done' ? 'approve' : 'reset to pending';
-    if (!confirm(`Are you sure you want to ${actionText} this order?`)) return;
-
-    button.disabled = true;
-    button.innerText = "...";
-
-    try {
-        const formData = new FormData();
-        formData.append("action", "updateStatus");
-        formData.append("Admission", admissionNo);
-        formData.append("Status", newStatus);
-
-        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
-        alert("Order updated successfully!");
-        fetchOrders(); 
-    } catch (error) {
-        alert("Error, try again.");
-        fetchOrders();
-    }
-}
-
-// --- Delete Order ---
-async function deleteOrder(admissionNo, button) {
-    if (!confirm("⚠️ Permanent Delete?")) return;
-
-    button.disabled = true;
-    button.innerText = "...";
-
-    try {
-        const formData = new FormData();
-        formData.append("action", "deleteOrder");
-        formData.append("Admission", admissionNo);
-
-        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
-        alert("Deleted successfully!");
-        fetchOrders(); 
-    } catch (error) {
-        alert("Error, try again.");
-        fetchOrders();
-    }
-}
-
-// --- Modal Preview ---
-function openSlipModal(url) {
-    const modal = document.getElementById("slipModal");
-    const modalImg = document.getElementById("modalImage");
-    
-    if (!modal || !modalImg) return;
-
-    modal.style.display = "flex";
-    modalImg.src = ""; 
-
-    if (url.includes("drive.google.com")) {
-        const fileId = url.split("/d/")[1].split("/")[0];
-        const directLink = `https://lh3.googleusercontent.com/d/${fileId}`;
-        modalImg.src = directLink;
-    } else {
-        modalImg.src = url; 
-    }
-}
-function closeSlipModal() {
-    document.getElementById("slipModal").style.display = "none";
-}
-
-// SHA256 Encryption
-async function SHA256(string) {
-    const utf8 = new TextEncoder().encode(string);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(bytes => bytes.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-}
-
-// Admin login function
-async function checkLogin() {
-    const inputPass = document.getElementById("adminPassInput").value;
-    const encryptedInput = await SHA256(inputPass);
-    const hashedCorrectPass = "b68ee1b8870adf335b8afc8c7cbb1710f9f0593019583115681136a07cbdfa94";
-
-    if (encryptedInput === hashedCorrectPass) {
-        sessionStorage.setItem("adminLoggedIn", "true");
-        showAdminContent();
-    } else {
-        alert("Incorrect Password! Try again.");
-    }
-}
-
-function showAdminContent() {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("adminContent").style.display = "block";
-    fetchOrders(); 
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-    if (sessionStorage.getItem("adminLoggedIn") === "true") {
-        showAdminContent();
-    }
-});
-
-function refreshTableOnly() {
-    const refreshBtn = document.getElementById("refreshBtn");
-    
-    if (refreshBtn) {
-        refreshBtn.disabled = true;
-        refreshBtn.innerText = "⏳ Loading Data...";
-        refreshBtn.style.borderColor = "#ffcc00";
-        refreshBtn.style.color = "#ffcc00";
-    }
-
-    fetchOrders();
-
-    setTimeout(() => {
-        if (refreshBtn) {
-            refreshBtn.disabled = false;
-            refreshBtn.innerText = "🔄 Refresh Table";
-            refreshBtn.style.borderColor = "#00ff88";
-            refreshBtn.style.color = "#00ff88";
-        }
-    }, 2500);
-}
-
-function filterAdminTable() {
-    const input = document.getElementById("adminSearchInput").value.toUpperCase();
-    const table = document.querySelector("table"); 
-    const tr = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < tr.length; i++) {
-        const tdAdmission = tr[i].getElementsByTagName("td")[0]; 
-        const tdName = tr[i].getElementsByTagName("td")[1];
-        
-        if (tdAdmission || tdName) {
-            const admissionText = tdAdmission.textContent || tdAdmission.innerText;
-            const nameText = tdName.textContent || tdName.innerText;
+        <div class="admin-container">
+            <div class="admin-header">
+                <!-- 🌐 NAV BUTTONS FOR SWITCHING PAGES -->
+                <div class="page-nav-wrapper">
+                    <a href="#" class="nav-btn active">📋 Orders List</a>
+                    <a href="Analytics.html" class="nav-btn">📊 Live Analytics</a>
+                </div>
+                <h2>Tech Batch - T-Shirt Orders Admin</h2>
+                <p>Manage student orders, view payment slips, and approve status live.</p>
             
-            if (admissionText.toUpperCase().indexOf(input) > -1 || nameText.toUpperCase().indexOf(input) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-}
+                <!-- 📈 Summary Cards Wrapper -->
+                <div class="summary-wrapper">
+                    <div class="summary-card total-card">
+                        <h3>Total Orders</h3>
+                        <div class="count-value" id="sumTotalOrders">0</div>
+                    </div>
 
-function filterStatus(status) {
-    const table = document.querySelector("table");
-    const tr = table.getElementsByTagName("tr");
+                    <div class="summary-card sizes-card">
+                        <h3>Size Requirements Count</h3>
+                        <div class="sizes-grid">
+                            <div class="size-box"><span>XS</span><strong id="sizeXS">0</strong></div>
+                            <div class="size-box"><span>S</span><strong id="sizeS">0</strong></div>
+                            <div class="size-box"><span>M</span><strong id="sizeM">0</strong></div>
+                            <div class="size-box"><span>L</span><strong id="sizeL">0</strong></div>
+                            <div class="size-box"><span>XL</span><strong id="sizeXL">0</strong></div>
+                            <div class="size-box"><span>XXL</span><strong id="sizeXXL">0</strong></div>
+                            <div class="size-box"><span>3XL</span><strong id="size3XL">0</strong></div>
+                            <div class="size-box"><span>4XL</span><strong id="size4XL">0</strong></div>
+                        </div>
+                    </div>
 
-    for (let i = 1; i < tr.length; i++) {
-        const tdStatus = tr[i].getElementsByTagName("td")[7]; 
+                    <div class="summary-card payment-card">
+                        <h3>Payment Methods</h3>
+                        <div class="pay-info-row">
+                            <span>💸 Cash Transfer:</span>
+                            <strong id="sumCash">0</strong>
+                        </div>
+                        <div class="pay-info-row">
+                            <span>🏦 Bank / Slip:</span>
+                            <strong id="sumBank">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="money-summary-wrapper" style="max-width: 1200px; margin: 0 auto 25px auto; padding: 0 5px;">
+                <div class="summary-card" style="border-color: rgba(0, 210, 255, 0.2) !important; flex-direction: row; justify-content: space-around; align-items: center; padding: 25px; flex-wrap: wrap; gap: 20px;">
         
-        if (tdStatus) {
-            const statusText = tdStatus.textContent || tdStatus.innerText; 
-            
-            if (status === 'all') {
-                tr[i].style.display = "";
-            } else if (status === 'pending' && statusText.trim() === "Pending") {
-                tr[i].style.display = "";
-            } else if (status === 'done' && statusText.trim() === "Done") { 
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-}
+                    <div style="text-align: center; min-width: 200px;">
+                        <h3 style="color: #00ff88; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Collected Amount (Approved)</h3>
+                        <p style="color: #00ff88; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);">
+                            Rs. <span id="moneyCollected">0</span>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; min-width: 200px; border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); padding: 0 20px;">
+                        <h3 style="color: #f59e0b; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Receivable Amount (Pending)</h3>
+                        <p style="color: #f59e0b; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);">
+                            Rs. <span id="moneyPending">0</span>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; min-width: 200px;">
+                        <h3 style="color: #00d2ff; border-bottom: none; margin-bottom: 5px; font-size: 14px;">Total Expected Revenue</h3>
+                        <p style="color: #00d2ff; font-size: 32px; font-weight: bold; margin: 0; text-shadow: 0 0 15px rgba(0, 210, 255, 0.3);">
+                            Rs. <span id="moneyTotal">0</span>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="TC" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 20px 0; flex-wrap: wrap; gap: 15px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <input type="text" id="adminSearchInput" onkeyup="filterAdminTable()" placeholder="Search by Name or Admission No..." style="padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; width: 280px; backdrop-filter: blur(5px);">
+        
+                    <button class="liquid-btn small" onclick="filterStatus('all')" style="padding: 10px 15px; font-size: 14px; cursor: pointer; border-radius: 8px; background: white; font-weight: 600; border: none;">
+                        All Orders (<span id="btnCountAll">0</span>)
+                    </button>
+                    <button class="liquid-btn small" onclick="filterStatus('pending')" style="padding: 10px 15px; font-size: 14px; background: #ffcc00; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">
+                        Pending (<span id="btnCountPending">0</span>)
+                    </button>
+                    <button class="liquid-btn small" onclick="filterStatus('done')" style="padding: 10px 15px; font-size: 14px; background: #00ff88; color: black; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;">
+                        Approved (<span id="btnCountApproved">0</span>)
+                    </button>
+                </div>
+                    <button onclick="refreshTableOnly()" id="refreshBtn" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #00ff88; background: transparent; color: #00ff88; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.3s;">
+                        🔄 Refresh Table
+                    </button>
+            </div>
+
+            <!-- 📋 Table Section -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Admission</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Phone</th>
+                            <th>Size</th>
+                            <th>Method</th>
+                            <th>Slip</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody">
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 20px;">Loading orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 👕 PRINTING SIZE CHART WITH REAL-TIME COUNTS (CHEST ROW REMOVED) -->
+        <div class="print-only-size-chart">
+            <center>
+                <h1 style="font-size: 22px; margin-bottom: 5px;">DHARMARAJA COLLEGE - KANDY</h1>
+                <h2 style="font-size: 16px; margin-bottom: 20px; color: #555;">Official '27 Batch T-Shirt - Size Guide & Summary</h2>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background-color: #f2f2f2 !important;">
+                            <th style="border: 1px solid #333 !important; padding: 10px;">Size</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">XS</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">S</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">M</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">L</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">XL</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">XXL</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">3XL</th>
+                            <th style="border: 1px solid #333 !important; padding: 10px;">4XL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-weight: bold; background-color: #f9f9f9;">
+                            <td style="border: 1px solid #333 !important; padding: 10px; color: #000; text-align: left; font-weight: bold;">Required Qty</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printXS">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printS">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printM">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printXL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="printXXL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="print3XL">0</td>
+                            <td style="border: 1px solid #333 !important; padding: 10px;" id="print4XL">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+        </div>
+
+        <!-- 🖼️ Slip Modal -->
+        <div id="slipModal" class="modal">
+            <span class="close-modal" onclick="closeSlipModal()">&times;</span>
+            <img class="modal-content" id="modalImage">
+        </div>
+
+    </div>
+
+    <script src="js/admin_late.js"></script>
+</body>
+</html>
