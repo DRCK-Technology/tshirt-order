@@ -1,0 +1,314 @@
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz_Zt0t2m-s382P_ns-O3_huGBJCj7wZP3qt4P1Lg6iVWPj1m40DxuLWUw-J8UPn4ApZw/exec';
+
+
+function fetchOrders() {
+    const tbody = document.getElementById("adminTableBody");
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px;">Loading orders...</td></tr>`;
+
+    const script = document.createElement('script');
+    script.src = `${scriptURL}?action=read&callback=handleResponse`;
+    document.body.appendChild(script);
+    document.body.removeChild(script); 
+}
+
+function handleResponse(data) {
+    const tbody = document.getElementById("adminTableBody");
+    tbody.innerHTML = "";
+
+    // Cutoff time
+    const cutoffTime = new Date("2026-07-20T00:11:00"); 
+
+    data = data.filter(order => {
+        if (!order.Timestamp) return false; 
+        const orderTime = new Date(order.Timestamp);
+        return orderTime > cutoffTime; 
+    });
+    // -------------------------------------------------------------
+
+    let totalOrders = 0;
+    let countXS = 0, countS = 0, countM = 0, countL = 0, countXL = 0, countXXL = 0, count3XL = 0, count4XL = 0;
+    let countCash = 0, countBank = 0;
+    
+    let totalPendingCount = 0;
+    let totalApprovedCount = 0;
+
+    const TSHIRT_PRICE = 2000;
+
+    if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">No orders found.</td></tr>`;
+        
+        if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = "0";
+        if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = "0";
+        if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = "0";
+        
+        if(document.getElementById("moneyCollected")) document.getElementById("moneyCollected").innerText = "0";
+        if(document.getElementById("moneyPending")) document.getElementById("moneyPending").innerText = "0";
+        if(document.getElementById("moneyTotal")) document.getElementById("moneyTotal").innerText = "0";
+        return;
+    }
+
+    data.forEach(order => {
+        totalOrders++; 
+
+        const orderSize = order.size ? order.size.toUpperCase().trim() : '';
+        if (orderSize === 'XS') countXS++;
+        else if (orderSize === 'S') countS++;
+        else if (orderSize === 'M') countM++;
+        else if (orderSize === 'L') countL++;
+        else if (orderSize === 'XL') countXL++;
+        else if (orderSize === 'XXL') countXXL++;
+        else if (orderSize === '3XL') count3XL++;
+        else if (orderSize === '4XL') count4XL++;
+
+        const payMethod = order.method ? order.method.toLowerCase().trim() : '';
+        if (payMethod === 'cash') countCash++;
+        else if (payMethod === 'bank') countBank++;
+
+        const orderStatus = order.status ? order.status.toLowerCase().trim() : '';
+        if (orderStatus === 'done') {
+            totalApprovedCount++;
+        } else {
+            totalPendingCount++; 
+        }
+
+        const tr = document.createElement("tr");
+        
+        let slipButton = "No Slip";
+        if (order.slipUrl && order.slipUrl !== "No Slip") {
+            slipButton = `<button class="btn-view" onclick="openSlipModal('${order.slipUrl}')">View Slip</button>`;
+        }
+
+        let actionButtons = "";
+        if (order.status.toLowerCase() === "done") {
+            actionButtons = `
+                <button class="btn-reset" onclick="updateStatus('${order.admission}', 'Pending', this)">Reset</button>
+                <button class="btn-delete" onclick="deleteOrder('${order.admission}', this)">Delete</button>
+            `;
+        } else {
+            actionButtons = `
+                <button class="btn-approve" onclick="updateStatus('${order.admission}', 'Done', this)">Approve</button>
+                <button class="btn-delete" onclick="deleteOrder('${order.admission}', this)">Delete</button>
+            `;
+        }
+
+        tr.innerHTML = `
+            <td>${order.admission}</td>
+            <td>${order.name}</td>
+            <td>${order.class}</td>
+            <td>${order.phone}</td>
+            <td><span style="color:#00ff88; font-weight:bold;">${order.size}</span></td>
+            <td>${order.method.toUpperCase()}</td>
+            <td>${slipButton}</td>
+            <td><span class="badge ${order.status.toLowerCase()}">${order.status}</span></td>
+            <td><div class="action-group">${actionButtons}</div></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // 📊 [FIXED] 1. ඇඩ්මින් පේජ් එකේ උඩ තියෙන සයිස් කාඩ්ස් ලයිව් අප්ඩේට් කරනවා
+    if(document.getElementById("sizeXS")) document.getElementById("sizeXS").innerText = countXS;
+    if(document.getElementById("sizeS")) document.getElementById("sizeS").innerText = countS;
+    if(document.getElementById("sizeM")) document.getElementById("sizeM").innerText = countM;
+    if(document.getElementById("sizeL")) document.getElementById("sizeL").innerText = countL;
+    if(document.getElementById("sizeXL")) document.getElementById("sizeXL").innerText = countXL;
+    if(document.getElementById("sizeXXL")) document.getElementById("sizeXXL").innerText = countXXL;
+    if(document.getElementById("size3XL")) document.getElementById("size3XL").innerText = count3XL;
+    if(document.getElementById("size4XL")) document.getElementById("size4XL").innerText = count4XL;
+
+    // 🖨️ 2. ප්‍රින්ට් වෙන ටේබල් එකටත් සයිස් ගණන් ටික එකපාර යවනවා
+    if(document.getElementById("printXS")) document.getElementById("printXS").innerText = countXS;
+    if(document.getElementById("printS")) document.getElementById("printS").innerText = countS;
+    if(document.getElementById("printM")) document.getElementById("printM").innerText = countM;
+    if(document.getElementById("printL")) document.getElementById("printL").innerText = countL;
+    if(document.getElementById("printXL")) document.getElementById("printXL").innerText = countXL;
+    if(document.getElementById("printXXL")) document.getElementById("printXXL").innerText = countXXL;
+    if(document.getElementById("print3XL")) document.getElementById("print3XL").innerText = count3XL;
+    if(document.getElementById("print4XL")) document.getElementById("print4XL").innerText = count4XL;
+
+    // 💸 3. මුදල් සහ ක්‍රමවේද අප්ඩේට් කිරීම්
+    if(document.getElementById("sumTotalOrders")) document.getElementById("sumTotalOrders").innerText = totalOrders;
+    if(document.getElementById("sumCash")) document.getElementById("sumCash").innerText = countCash;
+    if(document.getElementById("sumBank")) document.getElementById("sumBank").innerText = countBank;
+
+    // 🎯 4. ෆිල්ටර් බටන්ස් වල කවුන්ට් එක
+    if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = totalOrders;
+    if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = totalPendingCount;
+    if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = totalApprovedCount;
+
+    // මුළු මුදල් ගණනය කිරීම්
+    const collectedAmt = totalApprovedCount * TSHIRT_PRICE;
+    const pendingAmt = totalPendingCount * TSHIRT_PRICE;
+    const totalExpectedAmt = totalOrders * TSHIRT_PRICE;
+
+    if(document.getElementById("moneyCollected")) document.getElementById("moneyCollected").innerText = collectedAmt.toLocaleString();
+    if(document.getElementById("moneyPending")) document.getElementById("moneyPending").innerText = pendingAmt.toLocaleString();
+    if(document.getElementById("moneyTotal")) document.getElementById("moneyTotal").innerText = totalExpectedAmt.toLocaleString();
+}
+
+// --- Status Update ---
+async function updateStatus(admissionNo, newStatus, button) {
+    const actionText = newStatus === 'Done' ? 'approve' : 'reset to pending';
+    if (!confirm(`Are you sure you want to ${actionText} this order?`)) return;
+
+    button.disabled = true;
+    button.innerText = "...";
+
+    try {
+        const formData = new FormData();
+        formData.append("action", "updateStatus");
+        formData.append("Admission", admissionNo);
+        formData.append("Status", newStatus);
+
+        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+        alert("Order updated successfully!");
+        fetchOrders(); 
+    } catch (error) {
+        alert("Error, try again.");
+        fetchOrders();
+    }
+}
+
+// --- Delete Order ---
+async function deleteOrder(admissionNo, button) {
+    if (!confirm("⚠️ Permanent Delete?")) return;
+
+    button.disabled = true;
+    button.innerText = "...";
+
+    try {
+        const formData = new FormData();
+        formData.append("action", "deleteOrder");
+        formData.append("Admission", admissionNo);
+
+        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+        alert("Deleted successfully!");
+        fetchOrders(); 
+    } catch (error) {
+        alert("Error, try again.");
+        fetchOrders();
+    }
+}
+
+// --- Modal Preview ---
+function openSlipModal(url) {
+    const modal = document.getElementById("slipModal");
+    const modalImg = document.getElementById("modalImage");
+    
+    if (!modal || !modalImg) return;
+
+    modal.style.display = "flex";
+    modalImg.src = ""; 
+
+    if (url.includes("drive.google.com")) {
+        const fileId = url.split("/d/")[1].split("/")[0];
+        const directLink = `https://lh3.googleusercontent.com/d/${fileId}`;
+        modalImg.src = directLink;
+    } else {
+        modalImg.src = url; 
+    }
+}
+function closeSlipModal() {
+    document.getElementById("slipModal").style.display = "none";
+}
+
+// SHA256 Encryption
+async function SHA256(string) {
+    const utf8 = new TextEncoder().encode(string);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(bytes => bytes.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+// Admin login function
+async function checkLogin() {
+    const inputPass = document.getElementById("adminPassInput").value;
+    const encryptedInput = await SHA256(inputPass);
+    const hashedCorrectPass = "b68ee1b8870adf335b8afc8c7cbb1710f9f0593019583115681136a07cbdfa94";
+
+    if (encryptedInput === hashedCorrectPass) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        showAdminContent();
+    } else {
+        alert("Incorrect Password! Try again.");
+    }
+}
+
+function showAdminContent() {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminContent").style.display = "block";
+    fetchOrders(); 
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    if (sessionStorage.getItem("adminLoggedIn") === "true") {
+        showAdminContent();
+    }
+});
+
+function refreshTableOnly() {
+    const refreshBtn = document.getElementById("refreshBtn");
+    
+    if (refreshBtn) {
+        refreshBtn.disabled = true;
+        refreshBtn.innerText = "⏳ Loading Data...";
+        refreshBtn.style.borderColor = "#ffcc00";
+        refreshBtn.style.color = "#ffcc00";
+    }
+
+    fetchOrders();
+
+    setTimeout(() => {
+        if (refreshBtn) {
+            refreshBtn.disabled = false;
+            refreshBtn.innerText = "🔄 Refresh Table";
+            refreshBtn.style.borderColor = "#00ff88";
+            refreshBtn.style.color = "#00ff88";
+        }
+    }, 2500);
+}
+
+function filterAdminTable() {
+    const input = document.getElementById("adminSearchInput").value.toUpperCase();
+    const table = document.querySelector("table"); 
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        const tdAdmission = tr[i].getElementsByTagName("td")[0]; 
+        const tdName = tr[i].getElementsByTagName("td")[1];
+        
+        if (tdAdmission || tdName) {
+            const admissionText = tdAdmission.textContent || tdAdmission.innerText;
+            const nameText = tdName.textContent || tdName.innerText;
+            
+            if (admissionText.toUpperCase().indexOf(input) > -1 || nameText.toUpperCase().indexOf(input) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function filterStatus(status) {
+    const table = document.querySelector("table");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        const tdStatus = tr[i].getElementsByTagName("td")[7]; 
+        
+        if (tdStatus) {
+            const statusText = tdStatus.textContent || tdStatus.innerText; 
+            
+            if (status === 'all') {
+                tr[i].style.display = "";
+            } else if (status === 'pending' && statusText.trim() === "Pending") {
+                tr[i].style.display = "";
+            } else if (status === 'done' && statusText.trim() === "Done") { 
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
