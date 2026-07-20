@@ -15,6 +15,16 @@ function handleResponse(data) {
     const tbody = document.getElementById("adminTableBody");
     tbody.innerHTML = ""; 
 
+    // Cutoff time
+    const cutoffTime = new Date("2026-07-20T19:00:00"); 
+
+    data = data.filter(order => {
+        if (!order.Timestamp) return true;
+        const orderTime = new Date(order.Timestamp);
+        return orderTime <= cutoffTime;
+    });
+    // -------------------------------------------------------------
+
     let totalOrders = 0;
     let countXS = 0, countS = 0, countM = 0, countL = 0, countXL = 0, countXXL = 0, count3XL = 0, count4XL = 0;
     let countCash = 0, countBank = 0;
@@ -95,7 +105,6 @@ function handleResponse(data) {
         tbody.appendChild(tr);
     });
 
-    // 📊 [FIXED] 1. ඇඩ්මින් පේජ් එකේ උඩ තියෙන සයිස් කාඩ්ස් ලයිව් අප්ඩේට් කරනවා
     if(document.getElementById("sizeXS")) document.getElementById("sizeXS").innerText = countXS;
     if(document.getElementById("sizeS")) document.getElementById("sizeS").innerText = countS;
     if(document.getElementById("sizeM")) document.getElementById("sizeM").innerText = countM;
@@ -105,7 +114,6 @@ function handleResponse(data) {
     if(document.getElementById("size3XL")) document.getElementById("size3XL").innerText = count3XL;
     if(document.getElementById("size4XL")) document.getElementById("size4XL").innerText = count4XL;
 
-    // 🖨️ 2. ප්‍රින්ට් වෙන ටේබල් එකටත් සයිස් ගණන් ටික එකපාර යවනවා
     if(document.getElementById("printXS")) document.getElementById("printXS").innerText = countXS;
     if(document.getElementById("printS")) document.getElementById("printS").innerText = countS;
     if(document.getElementById("printM")) document.getElementById("printM").innerText = countM;
@@ -115,17 +123,16 @@ function handleResponse(data) {
     if(document.getElementById("print3XL")) document.getElementById("print3XL").innerText = count3XL;
     if(document.getElementById("print4XL")) document.getElementById("print4XL").innerText = count4XL;
 
-    // 💸 3. මුදල් සහ ක්‍රමවේද අප්ඩේට් කිරීම්
+ 
     if(document.getElementById("sumTotalOrders")) document.getElementById("sumTotalOrders").innerText = totalOrders;
     if(document.getElementById("sumCash")) document.getElementById("sumCash").innerText = countCash;
     if(document.getElementById("sumBank")) document.getElementById("sumBank").innerText = countBank;
 
-    // 🎯 4. ෆිල්ටර් බටන්ස් වල කවුන්ට් එක
+   
     if(document.getElementById("btnCountAll")) document.getElementById("btnCountAll").innerText = totalOrders;
     if(document.getElementById("btnCountPending")) document.getElementById("btnCountPending").innerText = totalPendingCount;
     if(document.getElementById("btnCountApproved")) document.getElementById("btnCountApproved").innerText = totalApprovedCount;
 
-    // මුළු මුදල් ගණනය කිරීම්
     const collectedAmt = totalApprovedCount * TSHIRT_PRICE;
     const pendingAmt = totalPendingCount * TSHIRT_PRICE;
     const totalExpectedAmt = totalOrders * TSHIRT_PRICE;
