@@ -22,25 +22,32 @@
     <!-- 📊 2. ANALYTICS CONTENT -->
     <div id="adminContent" style="display: none;">
         <div class="admin-container">
+            
             <div class="admin-header">
-                
-                <!-- 🌐 NAV BUTTONS FOR SWITCHING PAGES -->
+                <!-- 🌐 Navigation Wrapper (Full Width Header) -->
                 <div class="page-nav-wrapper">
-                    <a href="admin.html" class="nav-btn">📋 Orders List</a> 
-                    <a href="#" class="nav-btn active">📊 Live Analytics</a>
+                    <div class="nav-links">
+                        <a href="admin.html" class="nav-btn">📋 Orders List</a>
+                        <a href="#" class="nav-btn active">📊 Live Analytics</a>
+                    </div>
+    
+                    <div class="theme-switch-segmented">
+                        <!-- Sliding Bubble -->
+                        <div class="thumb-slider" id="thumbSlider"></div>
+    
+                        <div class="theme-icon-option active" onclick="setDashboardTheme('dark', 0)">🌙</div>
+                            <div class="theme-icon-option" onclick="setDashboardTheme('light', 1)">☀️</div>
+                        <div class="theme-icon-option" onclick="setDashboardTheme('cyber', 2)">👾</div>
+                </div>
                 </div>
 
-                <h2>Tech Batch - T-Shirt Orders Admin</h2>
-                <p>Real-time visual data summary for sizes, classes, and payment options.</p>
-            </div>
-
-            <!-- 🔄 Refresh Controls Row -->
-            <div class="analytics-control-row">
-                <button onclick="refreshChartsOnly()" id="refreshChartsBtn">
-                    <span class="btn-icon">🔄</span> Refresh Analytics Data
-                </button>
-            </div>
-
+<!-- 🔄 Refresh Row (Original Right Side Position) -->
+<div class="analytics-control-row">
+    <button onclick="refreshChartsOnly()" id="refreshChartsBtn">
+        <span class="btn-icon">🔄</span> Refresh Analytics Data
+    </button>
+</div>
+                
             <!-- 🗺️ Charts Grid Layout -->
             <div class="charts-grid">
     
@@ -84,9 +91,9 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
+            </div> 
+        </div> 
+    </div> 
 
     <!-- External Analytics JS Logic -->
     <script src="js/Analytics.js"></script>
