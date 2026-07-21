@@ -273,43 +273,56 @@ function refreshTableOnly() {
     }, 2500);
 }
 
-function filterAdminTable() {
-    const input = document.getElementById("adminSearchInput").value.toUpperCase();
-    const table = document.querySelector("table"); 
-    const tr = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < tr.length; i++) {
-        const tdAdmission = tr[i].getElementsByTagName("td")[0]; 
-        const tdName = tr[i].getElementsByTagName("td")[1];
-        
-        if (tdAdmission || tdName) {
-            const admissionText = tdAdmission.textContent || tdAdmission.innerText;
-            const nameText = tdName.textContent || tdName.innerText;
-            
-            if (admissionText.toUpperCase().indexOf(input) > -1 || nameText.toUpperCase().indexOf(input) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-}
+// Currently selected status (default 'all')
+let currentStatusFilter = 'all';
 
 function filterStatus(status) {
+    currentStatusFilter = status;
+    applyMasterFilter(); 
+}
+
+function filterAdminTable() {
+    applyMasterFilter(); 
+}
+
+function applyMasterFilter() {
+    const input = document.getElementById("adminSearchInput").value.toUpperCase().trim();
     const table = document.querySelector("table");
+    if (!table) return;
+
     const tr = table.getElementsByTagName("tr");
 
     for (let i = 1; i < tr.length; i++) {
-        const tdStatus = tr[i].getElementsByTagName("td")[7]; 
-        
-        if (tdStatus) {
-            const statusText = tdStatus.textContent || tdStatus.innerText; 
-            
-            if (status === 'all') {
-                tr[i].style.display = "";
-            } else if (status === 'pending' && statusText.trim() === "Pending") {
-                tr[i].style.display = "";
-            } else if (status === 'done' && statusText.trim() === "Done") { 
+        const tdAdmission = tr[i].getElementsByTagName("td")[0]; // Admission
+        const tdName = tr[i].getElementsByTagName("td")[1];      // Name
+        const tdClass = tr[i].getElementsByTagName("td")[2];     // Class
+        const tdPhone = tr[i].getElementsByTagName("td")[3];     // Phone
+        const tdStatus = tr[i].getElementsByTagName("td")[7];    // Status (Pending / Done)
+
+        if (tdAdmission || tdName || tdClass || tdPhone) {
+            const admissionText = tdAdmission ? (tdAdmission.textContent || tdAdmission.innerText) : "";
+            const nameText = tdName ? (tdName.textContent || tdName.innerText) : "";
+            const classText = tdClass ? (tdClass.textContent || tdClass.innerText) : "";
+            const phoneText = tdPhone ? (tdPhone.textContent || tdPhone.innerText) : "";
+            const statusText = tdStatus ? (tdStatus.textContent || tdStatus.innerText).trim() : "";
+
+            const matchesSearch = (
+                admissionText.toUpperCase().indexOf(input) > -1 ||
+                nameText.toUpperCase().indexOf(input) > -1 ||
+                classText.toUpperCase().indexOf(input) > -1 ||
+                phoneText.toUpperCase().indexOf(input) > -1
+            );
+
+            let matchesStatus = false;
+            if (currentStatusFilter === 'all') {
+                matchesStatus = true;
+            } else if (currentStatusFilter === 'pending' && statusText === "Pending") {
+                matchesStatus = true;
+            } else if (currentStatusFilter === 'done' && statusText === "Done") {
+                matchesStatus = true;
+            }
+
+            if (matchesSearch && matchesStatus) {
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
