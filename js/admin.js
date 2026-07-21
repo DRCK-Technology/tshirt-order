@@ -16,7 +16,7 @@ function handleResponse(data) {
     tbody.innerHTML = ""; 
 
     // Cutoff time
-    const cutoffTime = new Date("2026-07-20T09:00:00"); 
+    const cutoffTime = new Date("2026-07-20T19:00:00"); 
 
     data = data.filter(order => {
         const rawTime = order.Timestamp || order.timestamp || order.Date || order.date;
